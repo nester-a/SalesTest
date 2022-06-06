@@ -1,17 +1,18 @@
 ﻿using SalesTest.Domain.Base;
 using System.Collections.Generic;
 
-namespace SalesTest.Interfaces.Base.Repository;
-
-public interface IRepository<T> where T : IEntity
+namespace SalesTest.Interfaces.Base.Repository
 {
-    int Add(T item);
+    public interface IRepository<T> where T : IEntity
+    {
+        int Add(T item);
 
-    int Update(int id, T updatedItem);
+        int Update(int id, T updatedItem);
 
-    IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll();
 
-    T GetById(int id);
+        T GetById(int id);
 
-    T Delete(int id);
+        T Delete(int id);
+    }
 }
