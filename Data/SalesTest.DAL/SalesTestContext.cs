@@ -13,7 +13,7 @@ namespace SalesTest.DAL
         public DbSet<Product> Products { get; set; }
         public DbSet<ProvidedProduct> ProvidedProducts { get; set; }
         public DbSet<Sales> Sales { get; set; }
-        public DbSet<SalesData> SalesDatas { get; set; }
+        public DbSet<SalesData> SalesData { get; set; }
         public DbSet<SalesPoint> SalesPoints { get; set; }
     }
 }
