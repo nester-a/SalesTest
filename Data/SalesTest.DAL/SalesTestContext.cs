@@ -31,9 +31,12 @@ namespace SalesTest.DAL
     
     public class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
     {
-        public void Configure(EntityTypeBuilder<Buyer> builder>)
+        public void Configure(EntityTypeBuilder<Buyer> builder)
         {
-            // todo
+            builder.HasKey(b => b.Id);
+            builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.Name).IsRequired();
+            builder.Property(b => b.SalesIds).IsRequired();
         }
     }
 
@@ -41,7 +44,10 @@ namespace SalesTest.DAL
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            // todo
+            builder.HasKey(b => b.Id);
+            builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.Name).IsRequired();
+            builder.Property(b => b.Price).IsRequired();
         }
     }
 
@@ -49,7 +55,10 @@ namespace SalesTest.DAL
     {
         public void Configure(EntityTypeBuilder<ProvidedProduct> builder)
         {
-            // todo
+            builder.HasKey(b => b.Id);
+            builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.ProductId).IsRequired();
+            builder.Property(b => b.ProductQuantity).IsRequired();
         }
     }
 
@@ -57,7 +66,12 @@ namespace SalesTest.DAL
     {
         public void Configure(EntityTypeBuilder<Sales> builder)
         {
-            // todo
+            builder.HasKey(b => b.Id);
+            builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.DateTime).IsRequired();
+            builder.Property(b => b.SalesPointId).IsRequired();
+            builder.Property(b => b.SalesDataId).IsRequired();
+            builder.Property(b => b.TotalAmount).IsRequired();
         }
     }
 
@@ -65,15 +79,22 @@ namespace SalesTest.DAL
     {
         public void Configure(EntityTypeBuilder<SalesData> builder)
         {
-            // todo
+            builder.HasKey(b => b.Id);
+            builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.ProductId).IsRequired();
+            builder.Property(b => b.ProductQuantity).IsRequired();
+            builder.Property(b => b.ProductIdAmount).IsRequired();
         }
     }
 
-    public class SalesPointsConfiguration : IEntityTypeConfiguration<SalesPoints>
+    public class SalesPointsConfiguration : IEntityTypeConfiguration<SalesPoint>
     {
-        public void Configure(EntityTypeBuilder<SalesPoints> builder)
+        public void Configure(EntityTypeBuilder<SalesPoint> builder)
         {
-            // todo
+            builder.HasKey(b => b.Id);
+            builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.Name).IsRequired();
+            builder.Property(b => b.ProvidedProductsIds).IsRequired();
         }
     }
 }
