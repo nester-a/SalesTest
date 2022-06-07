@@ -9,5 +9,6 @@
         public int ProductQuantity { get; set; }
 
         public decimal ProductIdAmount { get; set; }
+        public int SaleID { get; set; }
     }
 }

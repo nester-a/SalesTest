@@ -6,6 +6,6 @@ namespace SalesTest.DAL.Enities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<int> SalesIds { get; set; }
+        //public IEnumerable<int> SalesIds { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace SalesTest.DAL.Enities
 
         public int? BuyerId { get; set; }
 
-        public ICollection<int> SalesDataId { get; set; }
+        //public IEnumerable<int> SalesDataId { get; set; }
 
         public decimal TotalAmount { get; set; }
     }
