@@ -17,6 +17,7 @@ namespace SalesTest.DAL
         public DbSet<SalesData> SalesData { get; set; }
         public DbSet<SalesPoint> SalesPoints { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new BuyerConfiguration());
@@ -28,7 +29,8 @@ namespace SalesTest.DAL
             base.OnModelCreating(builder);
         }
     }
-    
+
+    //сделано не менять
     public class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
     {
         public void Configure(EntityTypeBuilder<Buyer> builder)
@@ -36,27 +38,29 @@ namespace SalesTest.DAL
             builder.HasKey(b => b.Id);
             builder.HasIndex(b => b.Id).IsUnique();
             builder.Property(b => b.Name).IsRequired();
-            builder.Property(b => b.SalesIds).IsRequired();
+            builder.HasMany(b => b.Sales).WithOne(s => s.Buyer).HasForeignKey(b => b.Id);
         }
     }
 
+    //сделано не менять
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasKey(b => b.Id);
-            builder.HasIndex(b => b.Id).IsUnique();
-            builder.Property(b => b.Name).IsRequired();
-            builder.Property(b => b.Price).IsRequired();
+            builder.HasKey(p => p.Id);
+            builder.HasIndex(p => p.Id).IsUnique();
+            builder.Property(p => p.Name).IsRequired();
+            builder.Property(p => p.Price).IsRequired();
         }
     }
 
+    //сделано не менять
     public class ProvidedProductConfiguration : IEntityTypeConfiguration<ProvidedProduct>
     {
         public void Configure(EntityTypeBuilder<ProvidedProduct> builder)
         {
-            builder.HasKey(b => b.Id);
-            builder.HasIndex(b => b.Id).IsUnique();
+            builder.HasKey(p => p.Id);
+            builder.HasIndex(p => p.Id).IsUnique();
             builder.Property(b => b.ProductId).IsRequired();
             builder.Property(b => b.ProductQuantity).IsRequired();
         }
@@ -70,8 +74,8 @@ namespace SalesTest.DAL
             builder.HasIndex(b => b.Id).IsUnique();
             builder.Property(b => b.DateTime).IsRequired();
             builder.Property(b => b.SalesPointId).IsRequired();
-            builder.Property(b => b.SalesDataId).IsRequired();
             builder.Property(b => b.TotalAmount).IsRequired();
+            builder.HasMany(b => b.SalesData).WithOne(s => s.Sale).HasForeignKey(b => b.Id);
         }
     }
 
@@ -94,7 +98,7 @@ namespace SalesTest.DAL
             builder.HasKey(b => b.Id);
             builder.HasIndex(b => b.Id).IsUnique();
             builder.Property(b => b.Name).IsRequired();
-            builder.Property(b => b.ProvidedProductsIds).IsRequired();
+            builder.HasMany(b => b.ProvidedProducts);
         }
     }
 }
