@@ -37,6 +37,7 @@ namespace SalesTest.DAL
         {
             builder.HasKey(b => b.Id);
             builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.Id).ValueGeneratedOnAdd();
             builder.Property(b => b.Name).IsRequired();
             builder.HasMany(b => b.Sales).WithOne(s => s.Buyer).HasForeignKey(b => b.Id);
         }
@@ -49,6 +50,7 @@ namespace SalesTest.DAL
         {
             builder.HasKey(p => p.Id);
             builder.HasIndex(p => p.Id).IsUnique();
+            builder.Property(b => b.Id).ValueGeneratedOnAdd();
             builder.Property(p => p.Name).IsRequired();
             builder.Property(p => p.Price).IsRequired();
         }
@@ -61,6 +63,7 @@ namespace SalesTest.DAL
         {
             builder.HasKey(p => p.Id);
             builder.HasIndex(p => p.Id).IsUnique();
+            builder.Property(b => b.Id).ValueGeneratedOnAdd();
             builder.Property(b => b.ProductId).IsRequired();
             builder.Property(b => b.ProductQuantity).IsRequired();
         }
@@ -72,6 +75,7 @@ namespace SalesTest.DAL
         {
             builder.HasKey(b => b.Id);
             builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.Id).ValueGeneratedOnAdd();
             builder.Property(b => b.DateTime).IsRequired();
             builder.Property(b => b.SalesPointId).IsRequired();
             builder.Property(b => b.TotalAmount).IsRequired();
@@ -85,6 +89,7 @@ namespace SalesTest.DAL
         {
             builder.HasKey(b => b.Id);
             builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.Id).ValueGeneratedOnAdd();
             builder.Property(b => b.ProductId).IsRequired();
             builder.Property(b => b.ProductQuantity).IsRequired();
             builder.Property(b => b.ProductIdAmount).IsRequired();
@@ -97,6 +102,7 @@ namespace SalesTest.DAL
         {
             builder.HasKey(b => b.Id);
             builder.HasIndex(b => b.Id).IsUnique();
+            builder.Property(b => b.Id).ValueGeneratedOnAdd();
             builder.Property(b => b.Name).IsRequired();
             builder.HasMany(b => b.ProvidedProducts);
         }
