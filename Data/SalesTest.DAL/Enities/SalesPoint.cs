@@ -8,6 +8,6 @@ namespace SalesTest.DAL.Enities
 
         public string Name { get; set; }
 
-        //public IEnumerable<int> ProvidedProductsIds { get; set; }
+        public IEnumerable<ProvidedProduct> ProvidedProducts { get; set; }
     }
 }
