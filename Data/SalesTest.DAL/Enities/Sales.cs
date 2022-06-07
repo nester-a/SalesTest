@@ -7,9 +7,7 @@ namespace SalesTest.DAL.Enities
     {
         public int Id { get; set; }
 
-        public DateTimeOffset Date { get; } = DateTimeOffset.Now.Date;
-
-        public DateTimeOffset Time { get; } = DateTimeOffset.Now.ToLocalTime();
+        public DateTimeOffset DateTime { get; } = DateTimeOffset.Now;
 
         public int SalesPointId { get; set; }
 
