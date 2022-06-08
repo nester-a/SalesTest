@@ -10,4 +10,34 @@ public class ProductRepository : IRepository<Product>
     {
         _context = context;
     }
+
+    public int Add(Product item)
+    {
+        
+    }
+
+    public int Update(int id, Product updatedItem)
+    {
+        
+    }
+
+    public IEnumerable<Product> GetAll()
+    {
+        
+    }
+
+    public Product GetById(int id)
+    {
+        
+    }
+
+    public Product Delete(int id)
+    {
+        
+    }
+
+    public void Save()
+    {
+
+    }
 }
