@@ -6,6 +6,6 @@ namespace SalesTest.Domain.Base
     public interface IBuyer : INamedEntity
     {
         /// <summary>Collection of all buyer purchases</summary>
-        List<int> SalesIds { get; set; }
+        ICollection<int> SalesIds { get; set; }
     }
 }
