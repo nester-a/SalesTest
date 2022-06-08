@@ -14,5 +14,7 @@ namespace SalesTest.Interfaces.Base.Repository
         T GetById(int id);
 
         T Delete(int id);
+
+        void Save();
     }
 }
