@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\SalesTest.DAL\SalesTest.DAL.csproj" />
+    <ProjectReference Include="..\..\Services\SalesTest.Interfaces\SalesTest.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>
