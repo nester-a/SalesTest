@@ -1,13 +1,11 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
-using SalesTest.Domain;
 using System.Collections.Generic;
 using SalesTest.Interfaces.Extensions;
 
 using BuyerDAL = SalesTest.DAL.Enities.Buyer;
 using SalesDAL = SalesTest.DAL.Enities.Sales;
 using BuyerDOM = SalesTest.Domain.Buyer;
-using SalesDOM = SalesTest.Domain.Sales;
 using System;
 using System.Linq;
 
@@ -95,7 +93,5 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
             return sales;
         }
-
     }
-
 }
