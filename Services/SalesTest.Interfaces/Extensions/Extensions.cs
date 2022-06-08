@@ -35,6 +35,24 @@ namespace SalesTest.Interfaces.Extensions
             return buyer;
         }
 
-        public static ProductDAL T
+        public static ProductDAL ToDAL(this ProductDOM item)
+        {
+            return new ProductDAL()
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Price = item.Price,
+            };
+        }
+
+        public static ProductDOM ToDOM(this ProductDAL item)
+        {
+            return new ProductDOM()
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Price = item.Price,
+            };
+        }
     }
 }
