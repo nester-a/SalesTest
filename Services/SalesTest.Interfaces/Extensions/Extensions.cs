@@ -1,10 +1,7 @@
 ﻿using BuyerDAL = SalesTest.DAL.Enities.Buyer;
 using ProductDAL = SalesTest.DAL.Enities.Product;
-using SalesDAL = SalesTest.DAL.Enities.Sales;
 using BuyerDOM = SalesTest.Domain.Buyer;
 using ProductDOM = SalesTest.Domain.Product;
-using SalesDOM = SalesTest.Domain.Sales;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SalesTest.Interfaces.Extensions
