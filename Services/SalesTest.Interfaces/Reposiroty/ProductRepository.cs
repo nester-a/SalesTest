@@ -1,43 +1,47 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
+using SalesTest.Domain;
+using System.Collections.Generic;
 
-namespace SalesTest.SalesTest.Interfaces.Repository;
-
-public class ProductRepository : IRepository<Product>
+namespace SalesTest.SalesTest.Interfaces.Repository
 {
-    SalesTestContext _context;
-    public ProductRepository(SalesTestContext context)
+    public class ProductRepository : IRepository<Product>
     {
-        _context = context;
+        SalesTestContext _context;
+        public ProductRepository(SalesTestContext context)
+        {
+            _context = context;
+        }
+
+        public int Add(Product item)
+        {
+            return default;
+        }
+
+        public int Update(int id, Product updatedItem)
+        {
+            return default;
+        }
+
+        public List<Product> GetAll()
+        {
+            return default;
+        }
+
+        public Product GetById(int id)
+        {
+            return default;
+        }
+
+        public Product Delete(int id)
+        {
+            return default;
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
     }
 
-    public int Add(Product item)
-    {
-        
-    }
-
-    public int Update(int id, Product updatedItem)
-    {
-        
-    }
-
-    public IEnumerable<Product> GetAll()
-    {
-        
-    }
-
-    public Product GetById(int id)
-    {
-        
-    }
-
-    public Product Delete(int id)
-    {
-        
-    }
-
-    public void Save()
-    {
-
-    }
 }
