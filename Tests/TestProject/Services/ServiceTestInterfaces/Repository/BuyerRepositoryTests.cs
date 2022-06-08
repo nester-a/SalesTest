@@ -1,26 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SalesTest.DAL;
-using SalesTest.Domain;
+﻿using SalesTest.Domain;
 using SalesTest.SalesTest.Interfaces.Repository;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace TestProject.Services.ServiceTestInterfaces.Repository
 {
-    public class BuyerRepositoryTests
+    public class BuyerRepositoryTests : BaseTest
     {
-        static DbContextOptionsBuilder<SalesTestContext> optionBuilder = new DbContextOptionsBuilder<SalesTestContext>();
-        static DbContextOptions<SalesTestContext> option = optionBuilder.UseInMemoryDatabase("TestDB").Options;
-        static SalesTestContext db = new SalesTestContext(option);
+        //static DbContextOptionsBuilder<SalesTestContext> optionBuilder = new DbContextOptionsBuilder<SalesTestContext>();
+        //static DbContextOptions<SalesTestContext> option = optionBuilder.UseInMemoryDatabase("TestDB").Options;
+        //static SalesTestContext db = new SalesTestContext(option);
 
-        static BuyerRepositoryTests()
-        {
-            DbInitializer.Initializer(db);
-        }
+        //static BuyerRepositoryTests()
+        //{
+        //    DbInitializer.Initializer(db);
+        //}
 
         [Fact]
         public void BuyerRepository_Add_Test()
