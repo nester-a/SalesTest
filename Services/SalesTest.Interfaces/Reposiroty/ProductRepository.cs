@@ -41,7 +41,8 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public List<Product> GetAll()
         {
-            return default;
+            var all = _context.Products.ToList();
+            return all.Select(i => i.ToDOM()).ToList();
         }
 
         public Product GetById(int id)
