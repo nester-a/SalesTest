@@ -130,5 +130,42 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             Assert.True(result2 is not null);
             Assert.Equal(result2.Name, buyer2.Name);
         }
+
+        [Fact]
+        public void BuyerRepository_Delete_Test()
+        {
+            BuyerRepository repo = new BuyerRepository(db);
+
+            var buyer1 = new Buyer()
+            {
+                Name = "Hello",
+            };
+            var buyer2 = new Buyer()
+            {
+                Name = "World",
+            };
+
+            var id1 = repo.Add(buyer1);
+            var id2 = repo.Add(buyer2);
+            repo.Save();
+
+            Assert.True(db.Buyers.Count() == 2);
+
+            var result1 = repo.GetById(id1);
+            Assert.True(result1 is not null);
+            Assert.Equal(result1.Name, buyer1.Name);
+
+            var result2 = repo.GetById(id2);
+            Assert.True(result2 is not null);
+            Assert.Equal(result2.Name, buyer2.Name);
+
+            var deleteResult = repo.Delete(id1);
+            repo.Save();
+
+            Assert.True(deleteResult is not null);
+            Assert.Equal(deleteResult.Name, buyer1.Name);
+
+            Assert.True(db.Buyers.Count() == 1);
+        }
     }
 }
