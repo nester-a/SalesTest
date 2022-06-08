@@ -1,43 +1,97 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
+using System.Collections.Generic;
+using SalesTest.Interfaces.Extensions;
 
-namespace SalesTest.SalesTest.Interfaces.Repository;
+using BuyerDAL = SalesTest.DAL.Enities.Buyer;
+using SalesDAL = SalesTest.DAL.Enities.Sales;
+using BuyerDOM = SalesTest.Domain.Buyer;
+using System;
+using System.Linq;
 
-public class BuyerRepository : IRepository<Buyer>
+namespace SalesTest.SalesTest.Interfaces.Repository
 {
-    SalesTestContext _context;
-    public BuyerRepository(SalesTestContext context)
+    public class BuyerRepository : IRepository<BuyerDOM>
     {
-        _context = context;
-    }
+        SalesTestContext _context;
+        public BuyerRepository(SalesTestContext context)
+        {
+            _context = context;
+        }
 
-    public int Add(Buyer item)
-    {
-        
-    }
+        public int Add(BuyerDOM item)
+        {
+            if (item == null) throw new ArgumentNullException("Item is null");
+            var result = MapBuyerToDal(item);
 
-    public int Update(int id, Buyer updatedItem)
-    {
-        
-    }
+            return _context.Buyers.Add(result).Entity.Id;
+        }
 
-    public IEnumerable<Buyer> GetAll()
-    {
-        
-    }
+        public int Update(int id, BuyerDOM updatedItem)
+        {
+            if (updatedItem == null) throw new ArgumentNullException("Item is null");
 
-    public Buyer GetById(int id)
-    {
-        
-    }
+            var exsist = _context.Buyers.FirstOrDefault(i => i.Id == id);
+            if(exsist is null) throw new ArgumentException("Item not found");
 
-    public Buyer Delete(int id)
-    {
-        
-    }
+            exsist.Name = updatedItem.Name;
+            exsist.Sales = GetSales(updatedItem.SalesIds);
 
-    public void Save()
-    {
+            _context.Buyers.Update(exsist);
 
+            return id;
+
+        }
+
+        public List<BuyerDOM> GetAll()
+        {
+            var all = _context.Buyers.ToList();
+            return all.Select(i => i.ToDOM()).ToList();
+        }
+
+        public BuyerDOM GetById(int id)
+        {
+            var exsist = _context.Buyers.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            return exsist.ToDOM();
+        }
+
+        public BuyerDOM Delete(int id)
+        {
+            var exsist = _context.Buyers.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            _context.Remove(exsist);
+
+            return exsist.ToDOM();
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        private BuyerDAL MapBuyerToDal(BuyerDOM item)
+        {
+            var result = item.ToDAL();
+            List<SalesDAL> sales = GetSales(item.SalesIds);
+
+            result.Sales = sales;
+            return result;
+        }
+
+        private List<SalesDAL> GetSales(List<int> ids)
+        {
+            List<SalesDAL> sales = new List<SalesDAL>();
+            if (ids.Count == 0) return sales;
+            foreach (var sale in ids)
+            {
+                var findedSale = _context.Sales.Find(sale);
+                sales.Add(findedSale);
+            }
+
+            return sales;
+        }
     }
 }
