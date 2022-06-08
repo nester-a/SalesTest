@@ -46,7 +46,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         public List<BuyerDOM> GetAll()
         {
             var all = _context.Buyers.ToList();
-            return all.Select(i => i.ToDal()).ToList();
+            return all.Select(i => i.ToDOM()).ToList();
         }
 
         public BuyerDOM GetById(int id)
@@ -54,7 +54,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             var exsist = _context.Buyers.FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
 
-            return exsist.ToDal();
+            return exsist.ToDOM();
         }
 
         public BuyerDOM Delete(int id)
@@ -64,7 +64,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
             _context.Remove(exsist);
 
-            return exsist.ToDal();
+            return exsist.ToDOM();
         }
 
         public void Save()

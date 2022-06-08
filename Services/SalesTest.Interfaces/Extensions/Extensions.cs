@@ -1,6 +1,8 @@
 ﻿using BuyerDAL = SalesTest.DAL.Enities.Buyer;
+using ProductDAL = SalesTest.DAL.Enities.Product;
 using SalesDAL = SalesTest.DAL.Enities.Sales;
 using BuyerDOM = SalesTest.Domain.Buyer;
+using ProductDOM = SalesTest.Domain.Product;
 using SalesDOM = SalesTest.Domain.Sales;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,12 @@ namespace SalesTest.Interfaces.Extensions
             {
                 Id = item.Id,
                 Name = item.Name,
-                // здесь преобразователь можно какой-нибудь
+
+                // наполнение коллекции Sales происходит непосредственно в репозитории
             };
         }
 
-        public static BuyerDOM ToDal(this BuyerDAL item)
+        public static BuyerDOM ToDOM(this BuyerDAL item)
         {
             var sales = item.Sales?.Select(i => i.Id).ToList();
             var buyer = new BuyerDOM()
@@ -31,5 +34,7 @@ namespace SalesTest.Interfaces.Extensions
 
             return buyer;
         }
+
+        public static ProductDAL T
     }
 }
