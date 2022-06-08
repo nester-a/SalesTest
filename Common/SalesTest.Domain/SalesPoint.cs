@@ -10,6 +10,6 @@ namespace SalesTest.Domain
 
         public string Name { get; set; }
 
-        public List<IProvidedProduct> ProvidedProducts { get; set; } = new List<IProvidedProduct>();
+        public List<IProvidedProduct> ProvidedProducts { get; set; }
     }
 }

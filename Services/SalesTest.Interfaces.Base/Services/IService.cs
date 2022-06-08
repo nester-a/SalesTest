@@ -9,7 +9,7 @@ namespace SalesTest.Interfaces.Base.Services
 
         int Update(int id, T updatedItem);
 
-        List<T> GetAll();
+        IEnumerable<T> GetAll();
 
         T GetById(int id);
 

@@ -10,6 +10,6 @@ namespace SalesTest.Domain
 
         public string Name { get; set; }
 
-        public List<int> SalesIds { get; set; } = new List<int>();
+        public ICollection<int> SalesIds { get; set; }
     }
 }

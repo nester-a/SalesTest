@@ -11,7 +11,6 @@ namespace SalesTest.DAL.Enities
 
         public int SalesPointId { get; set; }
 
-        public int BuyerId { get; set; }
         public Buyer Buyer { get; set; }
 
         public List<SalesData> SalesData { get; set; } = new List<SalesData>();

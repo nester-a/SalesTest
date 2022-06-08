@@ -12,6 +12,6 @@ namespace SalesTest.DAL.Enities
 
         public string Name { get; set; }
 
-        public List<Sales> Sales { get; set; } = new List<Sales>();
+        public ICollection<Sales> Sales { get; set; } = new List<Sales>();
     }
 }

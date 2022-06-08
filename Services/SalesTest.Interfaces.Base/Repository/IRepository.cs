@@ -9,12 +9,10 @@ namespace SalesTest.Interfaces.Base.Repository
 
         int Update(int id, T updatedItem);
 
-        List<T> GetAll();
+        IEnumerable<T> GetAll();
 
         T GetById(int id);
 
         T Delete(int id);
-
-        void Save();
     }
 }
