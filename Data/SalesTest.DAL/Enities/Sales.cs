@@ -7,11 +7,11 @@ namespace SalesTest.DAL.Enities
     {
         public int Id { get; set; }
 
-        public DateTimeOffset DateTime { get; } = DateTimeOffset.Now;
+        public DateTimeOffset DateTime { get; set; } = DateTimeOffset.Now;
 
         public int SalesPointId { get; set; }
 
-        public int BuyerId { get; set; }
+        public int? BuyerId { get; set; }
         public Buyer Buyer { get; set; }
 
         public List<SalesData> SalesData { get; set; } = new List<SalesData>();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SalesTest.Interfaces.Base.Repository
 {
-    public interface IRepository<T> where T : IEntity
+    public interface IRepository<T>
     {
         int Add(T item);
 
