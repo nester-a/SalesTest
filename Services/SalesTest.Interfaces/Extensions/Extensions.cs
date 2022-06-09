@@ -61,6 +61,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
+        // TODO
         public static ProvidedProductDAL ToDAL(this IProvidedProduct item)
         {
             return new ProvidedProductDAL()
@@ -68,7 +69,7 @@ namespace SalesTest.Interfaces.Extensions
                 ProductId = item.ProductId,
                 ProductQuantity = item.ProductQuantity,
 
-                // наполнение коллекции Sales происходит непосредственно в репозитории -- не сделано
+                // наполнение коллекции SalesPoint происходит непосредственно в репозитории SalesPoint -- не сделано
             };
         }
 
@@ -90,7 +91,6 @@ namespace SalesTest.Interfaces.Extensions
                 ProvidedProducts = item.ProvidedProducts.Select(i => i.ToDAL()).ToList(),
             };
         }
-
         public static SalesPointDOM ToDOM(this SalesPointDAL item)
         {
             return new SalesPointDOM()
@@ -109,16 +109,11 @@ namespace SalesTest.Interfaces.Extensions
                 DateTime = DateTimeOffset.Parse(item.Date + " " + item.Time),
                 SalesPointId = item.SalesPointId,
                 BuyerId = item.BuyerId,
-                //покупателя добавим в репозиторие --- сделано
-
-
-                //SalesData = item.SalesData.Select(i => i.ToDAL()).ToList(),
-
-
+                //покупателя добавляем в репозитории
+                //данные покупок добавляем в репозитории
                 TotalAmount = item.TotalAmount,
             };
         }
-
         public static SalesDOM ToDOM(this SalesDAL item)
         {
             return new SalesDOM()
@@ -140,7 +135,7 @@ namespace SalesTest.Interfaces.Extensions
                 ProductId = item.ProductId,
                 ProductIdAmount = item.ProductIdAmount,
                 ProductQuantity = item.ProductQuantity,
-                //всё касающееся продажи добавляется в репозитории -- сделано
+                //всё касающееся продажи добавляем в репозитории
             };
         }
         public static ISalesData ToDOM(this SalesDataDAL item)
