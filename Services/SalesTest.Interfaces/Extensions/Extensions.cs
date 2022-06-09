@@ -140,7 +140,7 @@ namespace SalesTest.Interfaces.Extensions
                 ProductId = item.ProductId,
                 ProductIdAmount = item.ProductIdAmount,
                 ProductQuantity = item.ProductQuantity,
-                //всё касающееся продажи добавляется в репозитории
+                //всё касающееся продажи добавляется в репозитории -- сделано
             };
         }
         public static ISalesData ToDOM(this SalesDataDAL item)
