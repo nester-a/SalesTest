@@ -10,7 +10,7 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
         static SalesPointRepository repo = new SalesPointRepository(db);
 
         [Fact]
-        public void ProductsRepository_Add_Test()
+        public void SalesPointRepository_Add_Test()
         {
 
             var salesPoint = new SalesPoint()
@@ -26,7 +26,7 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
         }
 
         [Fact]
-        public void ProductsRepository_Update_Test()
+        public void SalesPointRepository_Update_Test()
         {
             var salesPoint = new SalesPoint()
             {
@@ -52,6 +52,38 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             salesPointDal = db.SalesPoints.Find(updated);
 
             Assert.True(salesPointDal.Name == salesPoint.Name);
+        }
+
+        [Fact]
+        public void SalesPointRepository_GetAll_Test()
+        {
+
+            var salesPoint1 = new SalesPoint()
+            {
+                Name = "Hello",
+
+            };
+            var salesPoint2 = new SalesPoint()
+            {
+                Name = "World",
+            };
+
+            repo.Add(salesPoint1);
+            repo.Add(salesPoint2);
+            repo.Save();
+
+            Assert.True(db.SalesPoints.Count() == 2);
+
+            var result = repo.GetAll();
+            Assert.Equal(2, result.Count);
+
+            var entity1 = result.FirstOrDefault(e => e.Name == salesPoint1.Name);
+            Assert.True(entity1 is not null);
+            Assert.Equal(entity1.Name, salesPoint1.Name);
+
+            var entity2 = result.FirstOrDefault(e => e.Name == salesPoint2.Name);
+            Assert.True(entity2 is not null);
+            Assert.Equal(entity2.Name, salesPoint2.Name);
         }
     }
 }
