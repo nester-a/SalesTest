@@ -4,6 +4,7 @@ using SalesTest.Domain;
 using System.Collections.Generic;
 using System;
 using SalesTest.Interfaces.Extensions;
+using System.Linq;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
@@ -25,7 +26,17 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public int Update(int id, SalesPoint updatedItem)
         {
-            return default;
+            if (updatedItem == null) throw new ArgumentNullException("Item is null");
+
+            var exsist = _context.SalesPoints.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            exsist.Name = updatedItem.Name;
+            exsist.ProvidedProducts = updatedItem.ProvidedProducts.Select(i => i.ToDAL()).ToList();
+
+            _context.SalesPoints.Update(exsist);
+
+            return id;
         }
 
         public List<SalesPoint> GetAll()
