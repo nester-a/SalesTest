@@ -27,26 +27,30 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         {
             if (item == null) throw new ArgumentNullException("Item is null");
 
-
-            //var list = item.SalesData.Select(i => MapSalesDataToDal(i, item)).ToList();
-
-
-
             var result = MapSalesToDal(item);
             result.SalesData = item.SalesData.Select(i => MapSalesDataToDal(i, item)).ToList();
             var id = _context.Sales.Add(result).Entity.Id;
-
-            //_context.SaveChanges();
-            //var res = _context.Sales.FirstOrDefault(i => i.Id == id);
-            //var sd = _context.SalesData.ToList();
-
 
             return id;
         }
 
         public int Update(int id, Sales updatedItem)
         {
-            return default;
+            if (updatedItem == null) throw new ArgumentNullException("Item is null");
+
+            var exsist = _context.Sales.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            exsist.DateTime = DateTimeOffset.Parse(updatedItem.Date + " " + updatedItem.Time);
+            exsist.BuyerId = updatedItem.BuyerId;
+            exsist.Buyer = _context.Buyers.FirstOrDefault(i => i.Id == updatedItem.BuyerId);
+            exsist.SalesPointId = updatedItem.SalesPointId;
+            exsist.SalesData = updatedItem.SalesData.Select(i => MapSalesDataToDal(i, updatedItem)).ToList();
+            exsist.TotalAmount = exsist.SalesData.Sum(i => i.ProductIdAmount);
+
+            _context.Sales.Update(exsist);
+
+            return id;
         }
 
         public List<Sales> GetAll()
