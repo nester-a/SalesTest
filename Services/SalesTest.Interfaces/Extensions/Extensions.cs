@@ -2,11 +2,16 @@
 using ProductDAL = SalesTest.DAL.Enities.Product;
 using SalesPointDAL = SalesTest.DAL.Enities.SalesPoint;
 using ProvidedProductDAL = SalesTest.DAL.Enities.ProvidedProduct;
+using SalesDAL = SalesTest.DAL.Enities.Sales;
+using SalesDataDAL = SalesTest.DAL.Enities.SalesData;
 using BuyerDOM = SalesTest.Domain.Buyer;
 using ProductDOM = SalesTest.Domain.Product;
 using SalesPointDOM = SalesTest.Domain.SalesPoint;
 using ProvidedProductDOM = SalesTest.Domain.ProvidedProduct;
+using SalesDOM = SalesTest.Domain.Sales;
+using SalesDataDOM = SalesTest.Domain.SalesData;
 using System.Linq;
+using System;
 using SalesTest.Domain.Base;
 
 namespace SalesTest.Interfaces.Extensions
@@ -19,8 +24,7 @@ namespace SalesTest.Interfaces.Extensions
             {
                 Id = item.Id,
                 Name = item.Name,
-
-                // наполнение коллекции Sales происходит непосредственно в репозитории
+                // наполнение коллекции Sales происходит непосредственно в репозитории - сделано
             };
         }
 
@@ -56,16 +60,7 @@ namespace SalesTest.Interfaces.Extensions
                 Price = item.Price,
             };
         }
-        public static ProvidedProductDAL ToDAL(this ProvidedProductDOM item)
-        {
-            return new ProvidedProductDAL()
-            {
-                ProductId = item.ProductId,
-                ProductQuantity = item.ProductQuantity,
 
-                // наполнение коллекции Sales происходит непосредственно в репозитории
-            };
-        }
         public static ProvidedProductDAL ToDAL(this IProvidedProduct item)
         {
             return new ProvidedProductDAL()
@@ -73,9 +68,10 @@ namespace SalesTest.Interfaces.Extensions
                 ProductId = item.ProductId,
                 ProductQuantity = item.ProductQuantity,
 
-                // наполнение коллекции Sales происходит непосредственно в репозитории
+                // наполнение коллекции Sales происходит непосредственно в репозитории -- не сделано
             };
         }
+
         public static IProvidedProduct ToDOM(this ProvidedProductDAL item)
         {
             return new ProvidedProductDOM()
@@ -102,6 +98,58 @@ namespace SalesTest.Interfaces.Extensions
                 Id = item.Id,
                 Name = item.Name,
                 ProvidedProducts = item.ProvidedProducts.Select(i => i.ToDOM()).ToList(),
+            };
+        }
+
+        public static SalesDAL ToDAL(this SalesDOM item)
+        {
+            return new SalesDAL()
+            {
+                Id = item.Id,
+                DateTime = DateTimeOffset.Parse(item.Date + " " + item.Time),
+                SalesPointId = item.SalesPointId,
+                BuyerId = item.BuyerId,
+                //покупателя добавим в репозиторие --- сделано
+
+
+                //SalesData = item.SalesData.Select(i => i.ToDAL()).ToList(),
+
+
+                TotalAmount = item.TotalAmount,
+            };
+        }
+
+        public static SalesDOM ToDOM(this SalesDAL item)
+        {
+            return new SalesDOM()
+            {
+                Id = item.Id,
+                Date = item.DateTime.Date.ToShortDateString(),
+                Time = item.DateTime.Date.ToShortTimeString(),
+                SalesPointId = item.SalesPointId,
+                BuyerId = item.BuyerId,
+                SalesData = item.SalesData.Select(i => i.ToDOM()).ToList(),
+                TotalAmount = item.TotalAmount,
+            };
+        }
+
+        public static SalesDataDAL ToDAL(this ISalesData item)
+        {
+            return new SalesDataDAL()
+            {
+                ProductId = item.ProductId,
+                ProductIdAmount = item.ProductIdAmount,
+                ProductQuantity = item.ProductQuantity,
+                //всё касающееся продажи добавляется в репозитории
+            };
+        }
+        public static ISalesData ToDOM(this SalesDataDAL item)
+        {
+            return new SalesDataDOM()
+            {
+                ProductId = item.ProductId,
+                ProductIdAmount = item.ProductIdAmount,
+                ProductQuantity = item.ProductQuantity,
             };
         }
     }
