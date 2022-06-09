@@ -85,5 +85,33 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             Assert.True(entity2 is not null);
             Assert.Equal(entity2.Name, salesPoint2.Name);
         }
+
+        [Fact]
+        public void SalesPointRepository_GetById_Test()
+        {
+            var salesPoint1 = new SalesPoint()
+            {
+                Name = "Hello",
+
+            };
+            var salesPoint2 = new SalesPoint()
+            {
+                Name = "World",
+            };
+
+            var id1 = repo.Add(salesPoint1);
+            var id2 = repo.Add(salesPoint2);
+            repo.Save();
+
+            Assert.True(db.SalesPoints.Count() == 2);
+
+            var result1 = repo.GetById(id1);
+            Assert.True(result1 is not null);
+            Assert.Equal(result1.Name, salesPoint1.Name);
+
+            var result2 = repo.GetById(id2);
+            Assert.True(result2 is not null);
+            Assert.Equal(result2.Name, salesPoint2.Name);
+        }
     }
 }
