@@ -55,17 +55,26 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public List<Sales> GetAll()
         {
-            return default;
+            var all = _context.Sales.ToList();
+            return all.Select(i => i.ToDOM()).ToList();
         }
 
         public Sales GetById(int id)
         {
-            return default;
+            var exsist = _context.Sales.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            return exsist.ToDOM();
         }
 
         public Sales Delete(int id)
         {
-            return default;
+            var exsist = _context.Sales.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            _context.Remove(exsist);
+
+            return exsist.ToDOM();
         }
 
         public void Save()

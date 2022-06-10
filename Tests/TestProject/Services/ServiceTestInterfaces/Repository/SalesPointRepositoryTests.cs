@@ -1,5 +1,6 @@
 ﻿using SalesTest.Domain;
 using SalesTest.SalesTest.Interfaces.Repository;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -17,12 +18,39 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             {
                 Name = "Hello",
             };
+            var list = new List<ProvidedProduct>()
+            {
+                new ProvidedProduct()
+                {
+                    ProductId = 1,
+                    ProductQuantity = 1,
+                },
+                new ProvidedProduct()
+                {
+                    ProductId = 2,
+                    ProductQuantity = 2,
+                },
+            };
+            
+            salesPoint.ProvidedProducts.AddRange(list);
 
             var result = repo.Add(salesPoint);
             repo.Save();
-
+            var find = db.SalesPoints.Find(result);
             Assert.True(result == 1);
-            Assert.True(db.SalesPoints.Find(result).Name == salesPoint.Name);
+            Assert.True(find.Name == salesPoint.Name);
+            Assert.True(find.ProvidedProducts.Count == 2);
+
+            Assert.True(db.ProvidedProducts.Count() == 2);
+            var pp = db.ProvidedProducts.ToList();
+
+            foreach (var item in pp)
+            {
+                Assert.True(item.SalesPointId == find.Id);
+                Assert.True(item.SalesPoint is not null);
+                Assert.Equal(find, item.SalesPoint);
+            }
+
         }
 
         [Fact]
@@ -32,6 +60,21 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             {
                 Name = "Hello",
             };
+            var list = new List<ProvidedProduct>()
+            {
+                new ProvidedProduct()
+                {
+                    ProductId = 1,
+                    ProductQuantity = 1,
+                },
+                new ProvidedProduct()
+                {
+                    ProductId = 2,
+                    ProductQuantity = 2,
+                },
+            };
+
+            salesPoint.ProvidedProducts.AddRange(list);
 
             var added = repo.Add(salesPoint);
             repo.Save();
@@ -44,6 +87,11 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
 
             salesPoint.Id = salesPointDal.Id;
             salesPoint.Name = "Hello World";
+            salesPoint.ProvidedProducts.Add(new ProvidedProduct()
+            {
+                ProductId = 3,
+                ProductQuantity = 3,
+            });
 
             var updated = repo.Update(salesPoint.Id, salesPoint);
             repo.Save();
@@ -52,6 +100,17 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             salesPointDal = db.SalesPoints.Find(updated);
 
             Assert.True(salesPointDal.Name == salesPoint.Name);
+            Assert.True(salesPointDal.ProvidedProducts.Count == 3);
+
+            Assert.True(db.ProvidedProducts.Count() == 3);
+            var pp = db.ProvidedProducts.ToList();
+
+            foreach (var item in pp)
+            {
+                Assert.True(item.SalesPointId == salesPointDal.Id);
+                Assert.True(item.SalesPoint is not null);
+                Assert.Equal(salesPointDal, item.SalesPoint);
+            }
         }
 
         [Fact]
@@ -67,6 +126,21 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             {
                 Name = "World",
             };
+            var list = new List<ProvidedProduct>()
+            {
+                new ProvidedProduct()
+                {
+                    ProductId = 1,
+                    ProductQuantity = 1,
+                },
+                new ProvidedProduct()
+                {
+                    ProductId = 2,
+                    ProductQuantity = 2,
+                },
+            };
+            salesPoint1.ProvidedProducts.AddRange(list);
+            salesPoint2.ProvidedProducts.AddRange(list);
 
             repo.Add(salesPoint1);
             repo.Add(salesPoint2);
@@ -80,10 +154,29 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             var entity1 = result.FirstOrDefault(e => e.Name == salesPoint1.Name);
             Assert.True(entity1 is not null);
             Assert.Equal(entity1.Name, salesPoint1.Name);
+            Assert.True(entity1.ProvidedProducts.Count == 2);
 
             var entity2 = result.FirstOrDefault(e => e.Name == salesPoint2.Name);
             Assert.True(entity2 is not null);
             Assert.Equal(entity2.Name, salesPoint2.Name);
+            Assert.True(entity2.ProvidedProducts.Count == 2);
+
+            var pp = db.ProvidedProducts.ToList();
+
+            foreach (var item in pp)
+            {
+                if(item.SalesPointId == 1)
+                {
+                    Assert.True(item.SalesPointId == entity1.Id);
+                    Assert.True(item.SalesPoint is not null);
+                }
+                else
+                {
+                    Assert.True(item.SalesPointId == 2);
+                    Assert.True(item.SalesPointId == entity2.Id);
+                    Assert.True(item.SalesPoint is not null);
+                }
+            }
         }
 
         [Fact]
