@@ -18,7 +18,7 @@ namespace SalesTest.Interfaces.Extensions
 {
     public static class Extensions
     {
-        public static BuyerDAL ToDAL(this BuyerDOM item)
+        public static BuyerDAL ToDAL(this IBuyer item)
         {
             return new BuyerDAL()
             {
@@ -28,7 +28,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static BuyerDOM ToDOM(this BuyerDAL item)
+        public static IBuyer ToDOM(this BuyerDAL item)
         {
             var sales = item.Sales?.Select(i => i.Id).ToList();
             var buyer = new BuyerDOM()
@@ -41,7 +41,7 @@ namespace SalesTest.Interfaces.Extensions
             return buyer;
         }
 
-        public static ProductDAL ToDAL(this ProductDOM item)
+        public static ProductDAL ToDAL(this IProduct item)
         {
             return new ProductDAL()
             {
@@ -51,7 +51,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static ProductDOM ToDOM(this ProductDAL item)
+        public static IProduct ToDOM(this ProductDAL item)
         {
             return new ProductDOM()
             {
@@ -79,7 +79,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static SalesPointDAL ToDAL(this SalesPointDOM item)
+        public static SalesPointDAL ToDAL(this ISalesPoint item)
         {
             return new SalesPointDAL()
             {
@@ -89,7 +89,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static SalesPointDOM ToDOM(this SalesPointDAL item)
+        public static ISalesPoint ToDOM(this SalesPointDAL item)
         {
             return new SalesPointDOM()
             {
@@ -99,7 +99,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static SalesDAL ToDAL(this SalesDOM item)
+        public static SalesDAL ToDAL(this ISales item)
         {
             return new SalesDAL()
             {
@@ -113,7 +113,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static SalesDOM ToDOM(this SalesDAL item)
+        public static ISales ToDOM(this SalesDAL item)
         {
             return new SalesDOM()
             {

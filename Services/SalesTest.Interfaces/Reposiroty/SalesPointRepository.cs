@@ -10,7 +10,7 @@ using SalesTest.Domain.Base;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
-    public class SalesPointRepository : IRepository<SalesPoint>
+    public class SalesPointRepository : IRepository<ISalesPoint>
     {
         SalesTestContext _context;
         public SalesPointRepository(SalesTestContext context)
@@ -18,7 +18,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             _context = context;
         }
 
-        public int Add(SalesPoint item)
+        public int Add(ISalesPoint item)
         {
             if (item == null) throw new ArgumentNullException("Item is null");
             var result = item.ToDAL();
@@ -28,7 +28,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return id;
         }
 
-        public int Update(int id, SalesPoint updatedItem)
+        public int Update(int id, ISalesPoint updatedItem)
         {
             if (updatedItem == null) throw new ArgumentNullException("Item is null");
 
@@ -43,13 +43,13 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return id;
         }
 
-        public List<SalesPoint> GetAll()
+        public List<ISalesPoint> GetAll()
         {
             var all = _context.SalesPoints.ToList();
             return all.Select(i => i.ToDOM()).ToList();
         }
 
-        public SalesPoint GetById(int id)
+        public ISalesPoint GetById(int id)
         {
             var exsist = _context.SalesPoints.FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
@@ -57,7 +57,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return exsist.ToDOM();
         }
 
-        public SalesPoint Delete(int id)
+        public ISalesPoint Delete(int id)
         {
             var exsist = _context.SalesPoints.FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
