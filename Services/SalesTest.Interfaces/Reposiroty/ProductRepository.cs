@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System;
 using SalesTest.Interfaces.Extensions;
 using System.Linq;
+using SalesTest.Domain.Base;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
-    public class ProductRepository : IRepository<Product>
+    public class ProductRepository : IRepository<IProduct>
     {
         SalesTestContext _context;
         public ProductRepository(SalesTestContext context)
@@ -16,7 +17,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             _context = context;
         }
 
-        public int Add(Product item)
+        public int Add(IProduct item)
         {
             if (item == null) throw new ArgumentNullException("Item is null");
             var result = item.ToDAL();
@@ -24,7 +25,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return _context.Products.Add(result).Entity.Id;
         }
 
-        public int Update(int id, Product updatedItem)
+        public int Update(int id, IProduct updatedItem)
         {
             if (updatedItem == null) throw new ArgumentNullException("Item is null");
 
@@ -39,13 +40,13 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return id;
         }
 
-        public List<Product> GetAll()
+        public List<IProduct> GetAll()
         {
             var all = _context.Products.ToList();
             return all.Select(i => i.ToDOM()).ToList();
         }
 
-        public Product GetById(int id)
+        public IProduct GetById(int id)
         {
             var exsist = _context.Products.FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
@@ -53,7 +54,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return exsist.ToDOM();
         }
 
-        public Product Delete(int id)
+        public IProduct Delete(int id)
         {
             var exsist = _context.Products.FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
