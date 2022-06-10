@@ -79,7 +79,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static SalesPointDAL ToDAL(this SalesPointDOM item)
+        public static SalesPointDAL ToDAL(this ISalesPoint item)
         {
             return new SalesPointDAL()
             {
@@ -89,7 +89,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static SalesPointDOM ToDOM(this SalesPointDAL item)
+        public static ISalesPoint ToDOM(this SalesPointDAL item)
         {
             return new SalesPointDOM()
             {
