@@ -61,15 +61,12 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        // TODO
         public static ProvidedProductDAL ToDAL(this IProvidedProduct item)
         {
             return new ProvidedProductDAL()
             {
                 ProductId = item.ProductId,
                 ProductQuantity = item.ProductQuantity,
-
-                // наполнение коллекции SalesPoint происходит непосредственно в репозитории SalesPoint -- не сделано
             };
         }
 
@@ -91,6 +88,7 @@ namespace SalesTest.Interfaces.Extensions
                 ProvidedProducts = item.ProvidedProducts.Select(i => i.ToDAL()).ToList(),
             };
         }
+
         public static SalesPointDOM ToDOM(this SalesPointDAL item)
         {
             return new SalesPointDOM()
@@ -114,6 +112,7 @@ namespace SalesTest.Interfaces.Extensions
                 TotalAmount = item.TotalAmount,
             };
         }
+
         public static SalesDOM ToDOM(this SalesDAL item)
         {
             return new SalesDOM()
@@ -138,6 +137,7 @@ namespace SalesTest.Interfaces.Extensions
                 //всё касающееся продажи добавляем в репозитории
             };
         }
+
         public static ISalesData ToDOM(this SalesDataDAL item)
         {
             return new SalesDataDOM()

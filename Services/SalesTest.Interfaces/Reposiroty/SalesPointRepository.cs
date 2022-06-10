@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System;
 using SalesTest.Interfaces.Extensions;
 using System.Linq;
+using ProvidedProductDAL = SalesTest.DAL.Enities.ProvidedProduct;
+using SalesTest.Domain.Base;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
@@ -20,8 +22,10 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         {
             if (item == null) throw new ArgumentNullException("Item is null");
             var result = item.ToDAL();
+            
+            var id = _context.SalesPoints.Add(result).Entity.Id;
 
-            return _context.SalesPoints.Add(result).Entity.Id;
+            return id;
         }
 
         public int Update(int id, SalesPoint updatedItem)
@@ -67,6 +71,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         {
             _context.SaveChanges();
         }
+
     }
 
 }
