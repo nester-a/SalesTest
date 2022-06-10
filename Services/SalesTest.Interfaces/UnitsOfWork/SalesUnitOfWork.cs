@@ -6,6 +6,7 @@ using SalesTest.Interfaces.Base.UnitsOfWork;
 using SalesTest.Interfaces.Model;
 using SalesTest.SalesTest.Interfaces.Repository;
 using System;
+using System.Collections.Generic;
 
 namespace SalesTest.Interfaces.UnitsOfWork
 {
@@ -81,6 +82,76 @@ namespace SalesTest.Interfaces.UnitsOfWork
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public bool ProductExists(int productId)
+        {
+            try
+            {
+                Products.GetById(productId);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool SalesPointExists(int salesPointId)
+        {
+            try
+            {
+                SalesPoints.GetById(salesPointId);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool BuyerExists(int buyerId)
+        {
+            try
+            {
+                Buyers.GetById(buyerId);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        public bool ProductsExistsOnSalesPoint(ISalesPoint salesPoint, IEnumerable<IProvidedProduct> products)
+        {
+            foreach (var item in products)
+            {
+                var onStock = salesPoint.ProvidedProducts.Contains(item);
+                if(!onStock) return false;
+            }
+            return true;
+        }
+
+        public bool ProductsExistsOnSalesPoint(int salesPointId, IEnumerable<IProvidedProduct> products)
+        {
+            var sp = SalesPoints.GetById(salesPointId);
+            return ProductsExistsOnSalesPoint(sp, products);
+        }
+
+        public decimal CountAmount(IProduct product, int productQuantity)
+        {
+            return product.Price * productQuantity;
+        }
+
+        public decimal CountAmount(int productId, int productQuantity)
+        {
+            var p = Products.GetById(productId);
+            return CountAmount(p, productQuantity);
         }
     }
 }
