@@ -8,10 +8,11 @@ using SalesDAL = SalesTest.DAL.Enities.Sales;
 using BuyerDOM = SalesTest.Domain.Buyer;
 using System;
 using System.Linq;
+using SalesTest.Domain.Base;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
-    public class BuyerRepository : IRepository<BuyerDOM>
+    public class BuyerRepository : IRepository<IBuyer>
     {
         SalesTestContext _context;
         public BuyerRepository(SalesTestContext context)
@@ -19,7 +20,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             _context = context;
         }
 
-        public int Add(BuyerDOM item)
+        public int Add(IBuyer item)
         {
             if (item == null) throw new ArgumentNullException("Item is null");
             var result = MapBuyerToDal(item);
@@ -27,7 +28,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return _context.Buyers.Add(result).Entity.Id;
         }
 
-        public int Update(int id, BuyerDOM updatedItem)
+        public int Update(int id, IBuyer updatedItem)
         {
             if (updatedItem == null) throw new ArgumentNullException("Item is null");
 
@@ -43,13 +44,13 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         }
 
-        public List<BuyerDOM> GetAll()
+        public List<IBuyer> GetAll()
         {
             var all = _context.Buyers.ToList();
             return all.Select(i => i.ToDOM()).ToList();
         }
 
-        public BuyerDOM GetById(int id)
+        public IBuyer GetById(int id)
         {
             var exsist = _context.Buyers.FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
@@ -57,7 +58,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return exsist.ToDOM();
         }
 
-        public BuyerDOM Delete(int id)
+        public IBuyer Delete(int id)
         {
             var exsist = _context.Buyers.FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
@@ -72,7 +73,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             _context.SaveChanges();
         }
 
-        private BuyerDAL MapBuyerToDal(BuyerDOM item)
+        private BuyerDAL MapBuyerToDal(IBuyer item)
         {
             var result = item.ToDAL();
             List<SalesDAL> sales = GetSales(item.SalesIds);

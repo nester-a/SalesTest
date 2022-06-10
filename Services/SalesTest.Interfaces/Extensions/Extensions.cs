@@ -18,7 +18,7 @@ namespace SalesTest.Interfaces.Extensions
 {
     public static class Extensions
     {
-        public static BuyerDAL ToDAL(this BuyerDOM item)
+        public static BuyerDAL ToDAL(this IBuyer item)
         {
             return new BuyerDAL()
             {
@@ -28,7 +28,7 @@ namespace SalesTest.Interfaces.Extensions
             };
         }
 
-        public static BuyerDOM ToDOM(this BuyerDAL item)
+        public static IBuyer ToDOM(this BuyerDAL item)
         {
             var sales = item.Sales?.Select(i => i.Id).ToList();
             var buyer = new BuyerDOM()
