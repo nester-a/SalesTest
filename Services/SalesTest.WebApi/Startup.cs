@@ -4,12 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using SalesTest.DAL;
+using SalesTest.Interfaces.Base.UnitsOfWork;
+using SalesTest.Interfaces.UnitsOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SalesTest.Interfaces.Base.Model;
+using SalesTest.Interfaces.Model;
 
 namespace SalesTest.WebApi
 {
@@ -22,18 +27,18 @@ namespace SalesTest.WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<SalesTestContext>(opt => opt.UseInMemoryDatabase("SalesTest"));
+            services.AddTransient<ISalesUnitOfWork, SalesUnitOfWork>();
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SalesTest.WebApi", Version = "v1" });
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
