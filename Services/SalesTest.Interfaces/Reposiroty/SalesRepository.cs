@@ -55,7 +55,8 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public List<Sales> GetAll()
         {
-            return default;
+            var all = _context.Sales.ToList();
+            return all.Select(i => i.ToDOM()).ToList();
         }
 
         public Sales GetById(int id)

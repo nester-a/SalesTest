@@ -134,5 +134,79 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
                 Assert.True(item.SalesId == 1);
             }
         }
+
+        [Fact]
+        public void SalesRepository_GetAll_Test()
+        {
+            var list = new List<ISalesData>()
+            {
+                new SalesData()
+                {
+                    ProductId = 1,
+                    ProductIdAmount = 1,
+                    ProductQuantity = 1,
+                },
+                new SalesData()
+                {
+                    ProductId = 2,
+                    ProductIdAmount = 2,
+                    ProductQuantity = 2,
+                },
+            };
+
+            Sales sales1 = new Sales()
+            {
+                SalesPointId = 1,
+                SalesData = list,
+                TotalAmount = list.Select(i => i.ProductIdAmount).Sum(),
+            };
+            Sales sales2 = new Sales()
+            {
+                SalesPointId = 2,
+                SalesData = list,
+                TotalAmount = list.Select(i => i.ProductIdAmount).Sum(),
+            };
+
+            var result1 = repo.Add(sales1);
+            var result2 = repo.Add(sales2);
+            repo.Save();
+
+            Assert.True(result1 == 1);
+            Assert.True(db.Sales.Find(result1).SalesPointId == sales1.SalesPointId);
+            Assert.True(db.Sales.Find(result1).DateTime == DateTimeOffset.Parse(sales1.Date + " " + sales1.Time));
+            Assert.True(db.Sales.Find(result1).Buyer is null);
+            Assert.True(db.Sales.Find(result1).BuyerId is null);
+            Assert.True(db.Sales.Find(result1).SalesData.Count == 2);
+            Assert.True(result2 == 2);
+            Assert.True(db.Sales.Find(result2).SalesPointId == sales2.SalesPointId);
+            Assert.True(db.Sales.Find(result2).DateTime == DateTimeOffset.Parse(sales2.Date + " " + sales2.Time));
+            Assert.True(db.Sales.Find(result2).Buyer is null);
+            Assert.True(db.Sales.Find(result2).BuyerId is null);
+            Assert.True(db.Sales.Find(result2).SalesData.Count == 2);
+            Assert.True(db.SalesData.ToList().Count == 4);
+
+            var sd = repo.GetAll();
+            foreach (var item in sd)
+            {
+                Assert.True(item is not null);
+                if(item.Id == 1)
+                {
+                    Assert.True(item.SalesPointId == sales1.SalesPointId);
+                    Assert.True(item.Date == sales1.Date);
+                    Assert.True(item.Time == sales1.Time);
+                    Assert.True(item.BuyerId is null);
+                    Assert.True(item.SalesData.Count == 2);
+                }
+                else
+                {
+                    Assert.True(item.Id == 2);
+                    Assert.True(item.SalesPointId == sales2.SalesPointId);
+                    Assert.True(item.Date == sales2.Date);
+                    Assert.True(item.Time == sales2.Time);
+                    Assert.True(item.BuyerId is null);
+                    Assert.True(item.SalesData.Count == 2);
+                }
+            }
+        }
     }
 }
