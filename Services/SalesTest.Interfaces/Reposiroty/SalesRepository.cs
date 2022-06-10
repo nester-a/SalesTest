@@ -61,7 +61,10 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public Sales GetById(int id)
         {
-            return default;
+            var exsist = _context.Sales.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            return exsist.ToDOM();
         }
 
         public Sales Delete(int id)
