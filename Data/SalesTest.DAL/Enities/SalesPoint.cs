@@ -8,6 +8,6 @@ namespace SalesTest.DAL.Enities
 
         public string Name { get; set; }
 
-        public ICollection<ProvidedProduct> ProvidedProducts { get; set; } = new List<ProvidedProduct>();
+        public List<ProvidedProduct> ProvidedProducts { get; set; } = new List<ProvidedProduct>();
     }
 }
