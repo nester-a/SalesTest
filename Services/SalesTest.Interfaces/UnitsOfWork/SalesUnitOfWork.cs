@@ -86,44 +86,17 @@ namespace SalesTest.Interfaces.UnitsOfWork
 
         public bool ProductExists(int productId)
         {
-            try
-            {
-                Products.GetById(productId);
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
+            return Products.Exists(productId);
         }
 
         public bool SalesPointExists(int salesPointId)
         {
-            try
-            {
-                SalesPoints.GetById(salesPointId);
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
+            return SalesPoints.Exists(salesPointId);
         }
 
         public bool BuyerExists(int buyerId)
         {
-            try
-            {
-                Buyers.GetById(buyerId);
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
+            return Buyers.Exists(buyerId);
         }
 
 
