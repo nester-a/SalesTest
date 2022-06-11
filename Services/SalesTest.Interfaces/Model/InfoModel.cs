@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace SalesTest.Interfaces.Model
 {
+    ///<inheritdoc cref="IInfoModel"/>
     public class InfoModel : IInfoModel
     {
         public List<IBuyer> BuyersInfo { get; set; }
