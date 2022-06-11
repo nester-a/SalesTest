@@ -1,6 +1,5 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
-using SalesTest.Domain;
 using System.Collections.Generic;
 using System;
 using SalesTest.Interfaces.Extensions;
@@ -9,6 +8,7 @@ using SalesTest.Domain.Base;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
+    ///<inheritdoc cref="IRepository<T>"/>
     public class ProductRepository : IRepository<IProduct>
     {
         SalesTestContext _context;
@@ -67,6 +67,24 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public bool Exists(int id)
+        {
+            var result = _context.Products.FirstOrDefault(i => i.Id == id);
+            if (result is null) return false;
+            return true;
+        }
+
+        public List<string> GetAllInformation()
+        {
+            var all = GetAll();
+            var result = new List<string>();
+            foreach (var item in all)
+            {
+                result.Add($"Id: {item.Id}; Name: {item.Name}; Price: {item.Price}");
+            }
+            return result;
         }
     }
 

@@ -1,20 +1,17 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
-using SalesTest.Domain;
 using System.Collections.Generic;
 using System;
 using SalesTest.Interfaces.Extensions;
-
-using BuyerDAL = SalesTest.DAL.Enities.Buyer;
 using SalesDAL = SalesTest.DAL.Enities.Sales;
 using SalesDataDAL = SalesTest.DAL.Enities.SalesData;
-using BuyerDOM = SalesTest.Domain.Buyer;
-using SalesDataDOM = SalesTest.Domain.SalesData;
 using System.Linq;
 using SalesTest.Domain.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
+    ///<inheritdoc cref="IRepository<T>"/>
     public class SalesRepository : IRepository<ISales>
     {
         SalesTestContext _context;
@@ -55,13 +52,13 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public List<ISales> GetAll()
         {
-            var all = _context.Sales.ToList();
+            var all = _context.Sales.Include(s => s.SalesData).ToList();
             return all.Select(i => i.ToDOM()).ToList();
         }
 
         public ISales GetById(int id)
         {
-            var exsist = _context.Sales.FirstOrDefault(i => i.Id == id);
+            var exsist = _context.Sales.Include(s => s.SalesData).FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
 
             return exsist.ToDOM();
@@ -69,7 +66,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public ISales Delete(int id)
         {
-            var exsist = _context.Sales.FirstOrDefault(i => i.Id == id);
+            var exsist = _context.Sales.Include(s => s.SalesData).FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
 
             _context.Remove(exsist);
@@ -80,6 +77,13 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public bool Exists(int id)
+        {
+            var result = _context.Sales.FirstOrDefault(i => i.Id == id);
+            if (result is null) return false;
+            return true;
         }
 
         private SalesDAL MapSalesToDal(ISales item)
@@ -95,6 +99,25 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             var result = salesData.ToDAL();
             result.SalesId = item.Id;
 
+            return result;
+        }
+
+        public List<string> GetAllInformation()
+        {
+            var all = GetAll();
+            var result = new List<string>();
+            foreach (var item in all)
+            {
+                result.Add($"Id: {item.Id}; Date: {item.Date}; Time: {item.Time}; Sales Point Id: {item.SalesPointId}; Buyer Id: {item.BuyerId}; Total Amount: {item.TotalAmount}");
+                if (item.SalesData.Count > 0)
+                {
+                    result.Add($"Sales Data:");
+                    foreach (var sales in item.SalesData)
+                    {
+                        result.Add($"Product Id: {sales.ProductId}, Products Quantity: {sales.ProductQuantity}, Product Id Amount: {sales.ProductIdAmount}");
+                    }
+                }
+            }
             return result;
         }
     }

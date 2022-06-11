@@ -21,7 +21,7 @@ namespace SalesTest.WebApi
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<SalesTestContext>();
-                DbInitializer.Initializer(db);
+                DbInitializer.InitializeWithData(db);
             }
             await host.RunAsync();
         }

@@ -6,13 +6,7 @@ namespace SalesTest.Domain.Base
     public interface ISales : IEntity
     {
         /// <summary>Date of sale</summary>
-        //DateTimeOffset Date { get; }
-
-        /// <summary>Date of sale</summary>
         string Date { get; }
-
-        /// <summary>Time of sale</summary>
-        //DateTimeOffset Time { get; }
 
         /// <summary>Time of sale</summary>
         string Time { get; }

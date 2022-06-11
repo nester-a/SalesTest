@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace SalesTest.Interfaces.Base.Model
 {
+    /// <summary>Purchase transaction information model</summary>
     public interface ISaleModel
     {
         IDictionary<int, int> ProductsToBuy { get; set; }
-        //IProduct Product { get; set; }
-        //int Quantity { get; set; }
 
         int SalesPointId { get; set; }
 
-        IBuyer Buyer { get; set; }
+        int? BuyerId { get; set; }
     }
 }
