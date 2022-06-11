@@ -1,3 +1,40 @@
+1. To launch, select the web api project as an autorun.
+2. Click the start button
+3. The controller has two methods: get information and make a sale.
+4. With the receipt of information, everything is clear.
+
+5. The method of making a sale takes a SaleModel object, the necessary goods are stored in it in the dictionary, where the Key is Id of the product, and Value is its quantity.
+It looks like this:
+{
+    "salesPointId": 0,           <---- id of the point of sale
+    "buyerId": 0,                <---- buyer ID
+    "productsToBuy": {           <---- dictionary of purchased goods
+        "additionalProp1": 0,    <---- dictionary elements
+        "additionalProp2": 0,
+        "additionalProp3": 0
+    }
+}
+
+6. In the swager, the Id is passed to the dictionary in quotation marks (example "1":1 - this means that a product with id 1 in the amount of 1 piece is required), if there are several products, they are passed by comma.
+7. No comma is placed after the last dictionary element
+8. If the buyer is not in the database, he is omitted in the methods.
+It looks like this:
+{
+    "salesPointId": 0,          <---- id of the point of sale
+    "productsToBuy": {          <---- dictionary of purchased products
+        "additionalProp1": 0,   <---- dictionary elements
+        "additionalProp2": 0,
+        "additionalProp3": 0
+       }
+}
+
+9. Enjoy your use
+
+
+
+
+
+
 1. Для запуска выбираем проект веб-апи в качестве автозапускаемого.
 2. Нажимаем кнопку запуск
 3. У контроллера два метода: получить информацию и совершить продажу. 
