@@ -61,13 +61,14 @@ namespace SalesTest.Interfaces.UnitsOfWork
 
         public IInfoModel GetAll()
         {
-            return new InfoModel()
-            {
-                BuyersInfo = Buyers.GetAll(),
-                SalesInfo = Sales.GetAll(),
-                SalesPointsInfo = SalesPoints.GetAll(),
-                ProductInfo = Products.GetAll(),
-            };
+            var info = new InfoModel();
+
+            info.BuyersInfo.AddRange(Buyers.GetAllInformation());
+            info.ProductInfo.AddRange(Products.GetAllInformation());
+            info.SalesPointsInfo.AddRange(SalesPoints.GetAllInformation());
+            info.SalesInfo.AddRange(Sales.GetAllInformation());
+
+            return info;
         }
         public virtual void Dispose(bool disposing)
         {
