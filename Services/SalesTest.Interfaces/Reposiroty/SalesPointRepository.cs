@@ -78,6 +78,26 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             if (result is null) return false;
             return true;
         }
+
+        public List<string> GetAllInformation()
+        {
+            var all = GetAll();
+            var result = new List<string>();
+            foreach (var item in all)
+            {
+                result.Add($"Id: {item.Id}; Name: {item.Name};");
+                if (item.ProvidedProducts.Count > 0)
+                {
+                    result.Add($"Provided products:");
+                    foreach (var product in item.ProvidedProducts)
+                    {
+                        result.Add($"Product Id: {product.ProductId}; Product quantity: {product.ProductQuantity};");
+                    }
+                }
+                else result.Add($"No provided products");
+            }
+            return result;
+        }
     }
 
 }

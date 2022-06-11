@@ -75,6 +75,17 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             if (result is null) return false;
             return true;
         }
+
+        public List<string> GetAllInformation()
+        {
+            var all = GetAll();
+            var result = new List<string>();
+            foreach (var item in all)
+            {
+                result.Add($"Id: {item.Id}; Name: {item.Name}; Price: {item.Price}");
+            }
+            return result;
+        }
     }
 
 }

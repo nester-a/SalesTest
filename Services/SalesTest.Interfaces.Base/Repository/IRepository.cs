@@ -38,5 +38,9 @@ namespace SalesTest.Interfaces.Base.Repository
         /// <param name="id">Id of item</param>
         /// <returns>True if the item exsists</returns>
         bool Exists(int id);
+
+        /// <summary>Get information about all objects in repository</summary>
+        /// <returns>List of string information</returns>
+        List<string> GetAllInformation();
     }
 }

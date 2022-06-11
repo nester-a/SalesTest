@@ -101,5 +101,24 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
             return result;
         }
+
+        public List<string> GetAllInformation()
+        {
+            var all = GetAll();
+            var result = new List<string>();
+            foreach (var item in all)
+            {
+                result.Add($"Id: {item.Id}; Date: {item.Date}; Time: {item.Time}; Sales Point Id: {item.SalesPointId}; Buyer Id: {item.BuyerId}; Total Amount: {item.TotalAmount}");
+                if (item.SalesData.Count > 0)
+                {
+                    result.Add($"Sales Data:");
+                    foreach (var sales in item.SalesData)
+                    {
+                        result.Add($"Product Id: {sales.ProductId}, Products Quantity: {sales.ProductQuantity}, Product Id Amount: {sales.ProductIdAmount}");
+                    }
+                }
+            }
+            return result;
+        }
     }
 }
