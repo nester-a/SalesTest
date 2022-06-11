@@ -9,9 +9,9 @@ namespace SalesTest.Domain
     {
         public int Id { get; set; }
 
-        public string Date { get; set; } = DateTimeOffset.Now.Date.ToShortDateString();
+        public string Date { get; set; } = DateTime.Now.Date.ToShortDateString();
 
-        public string Time {get; set; } = DateTimeOffset.Now.Date.ToShortTimeString();
+        public string Time {get; set; } = DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
 
         public int SalesPointId { get; set; }
 

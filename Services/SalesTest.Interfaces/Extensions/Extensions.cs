@@ -119,7 +119,7 @@ namespace SalesTest.Interfaces.Extensions
             {
                 Id = item.Id,
                 Date = item.DateTime.Date.ToShortDateString(),
-                Time = item.DateTime.Date.ToShortTimeString(),
+                Time = item.DateTime.Hour + ":" + item.DateTime.Minute + ":" + item.DateTime.Second,
                 SalesPointId = item.SalesPointId,
                 BuyerId = item.BuyerId,
                 SalesData = item.SalesData.Select(i => i.ToDOM()).ToList(),
