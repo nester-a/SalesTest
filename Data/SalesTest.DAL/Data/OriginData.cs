@@ -121,30 +121,5 @@ namespace SalesTest.DAL.Data
                 SalesPointId = 1,
             },
         };
-
-
-
-        //public static List<Sales> sales = new List<Sales>()
-        //{
-        //    new Sales()
-        //    {
-        //        Id = 1,
-        //        SalesPointId = 1,
-        //        BuyerId = 1,
-        //        SalesData = salesData,
-        //        TotalAmount = 12,
-        //    },
-        //};
-        //public static List<SalesData> salesData = new List<SalesData>()
-        //{
-        //    new SalesData()
-        //    {
-        //        ProductId = 1,
-        //        ProductQuantity = 1,
-        //        ProductIdAmount = 12,
-        //        SalesId = 1,
-        //    },
-        //};
-
     }
 }
