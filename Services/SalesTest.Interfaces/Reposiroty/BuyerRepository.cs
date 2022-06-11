@@ -7,6 +7,7 @@ using SalesDAL = SalesTest.DAL.Enities.Sales;
 using System;
 using System.Linq;
 using SalesTest.Domain.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
@@ -45,13 +46,13 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public List<IBuyer> GetAll()
         {
-            var all = _context.Buyers.ToList();
+            var all = _context.Buyers.Include(b => b.Sales).ToList();
             return all.Select(i => i.ToDOM()).ToList();
         }
 
         public IBuyer GetById(int id)
         {
-            var exsist = _context.Buyers.FirstOrDefault(i => i.Id == id);
+            var exsist = _context.Buyers.Include(b => b.Sales).FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
 
             return exsist.ToDOM();
@@ -59,7 +60,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
 
         public IBuyer Delete(int id)
         {
-            var exsist = _context.Buyers.FirstOrDefault(i => i.Id == id);
+            var exsist = _context.Buyers.Include(b => b.Sales).FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
 
             _context.Remove(exsist);
