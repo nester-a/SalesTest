@@ -110,5 +110,10 @@ namespace SalesTest.DAL.Data
                 TotalAmount = 12,
             },
         };
+
+        public static List<Buyer> Buyers { get => buyers; }
+        public static List<Product> Products { get => products; }
+        public static List<SalesPoint> SalesPoints { get => salesPoints; }
+        public static List<Sales> Sales { get => sales; }
     }
 }
