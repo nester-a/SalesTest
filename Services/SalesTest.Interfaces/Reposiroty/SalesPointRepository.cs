@@ -1,15 +1,14 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
-using SalesTest.Domain;
 using System.Collections.Generic;
 using System;
 using SalesTest.Interfaces.Extensions;
 using System.Linq;
-using ProvidedProductDAL = SalesTest.DAL.Enities.ProvidedProduct;
 using SalesTest.Domain.Base;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
+    ///<inheritdoc cref="IRepository<T>"/>
     public class SalesPointRepository : IRepository<ISalesPoint>
     {
         SalesTestContext _context;
@@ -72,6 +71,12 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             _context.SaveChanges();
         }
 
+        public bool Exists(int id)
+        {
+            var result = _context.SalesPoints.FirstOrDefault(i => i.Id == id);
+            if (result is null) return false;
+            return true;
+        }
     }
 
 }

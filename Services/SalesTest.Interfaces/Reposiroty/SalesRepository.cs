@@ -1,20 +1,16 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
-using SalesTest.Domain;
 using System.Collections.Generic;
 using System;
 using SalesTest.Interfaces.Extensions;
-
-using BuyerDAL = SalesTest.DAL.Enities.Buyer;
 using SalesDAL = SalesTest.DAL.Enities.Sales;
 using SalesDataDAL = SalesTest.DAL.Enities.SalesData;
-using BuyerDOM = SalesTest.Domain.Buyer;
-using SalesDataDOM = SalesTest.Domain.SalesData;
 using System.Linq;
 using SalesTest.Domain.Base;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
+    ///<inheritdoc cref="IRepository<T>"/>
     public class SalesRepository : IRepository<ISales>
     {
         SalesTestContext _context;
@@ -80,6 +76,13 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public bool Exists(int id)
+        {
+            var result = _context.Sales.FirstOrDefault(i => i.Id == id);
+            if (result is null) return false;
+            return true;
         }
 
         private SalesDAL MapSalesToDal(ISales item)
