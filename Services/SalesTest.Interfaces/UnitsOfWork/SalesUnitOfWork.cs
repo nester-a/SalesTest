@@ -177,9 +177,11 @@ namespace SalesTest.Interfaces.UnitsOfWork
 
             SalesPoints.Update(salesPoint.Id, updatedSalesPoint);
             var salesId = Sales.Add(sales);
-            buyer.SalesIds.Add(salesId);
             if (buyer is not null)
+            {
+                buyer.SalesIds.Add(salesId);
                 Buyers.Update(buyer.Id, buyer);
+            }
             Sales.Save();
         }
 
