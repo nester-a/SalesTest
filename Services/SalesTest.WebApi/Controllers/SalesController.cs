@@ -15,6 +15,8 @@ namespace SalesTest.WebApi.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>Get all information about buyers, sale point, products and sales</summary>
+        /// <returns>List of information</returns>
         [HttpGet]
         [Route("/info")]
         public IActionResult AllInfo()
@@ -22,6 +24,9 @@ namespace SalesTest.WebApi.Controllers
             return Ok(_unitOfWork.GetAll());
         }
 
+        /// <summary>Do sales action</summary>
+        /// <param name="saleModel">Who, where, buy what</param>
+        /// <returns>Sales action result</returns>
         [HttpPost]
         [Route("/sale")]
         public IActionResult Sale([FromBody]SaleModel saleModel)
