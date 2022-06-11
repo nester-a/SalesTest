@@ -5,12 +5,13 @@ namespace SalesTest.DAL.Data
 {
     public static class OriginData
     {
-        static List<Buyer> buyers = new List<Buyer>()
+        public static List<Buyer> buyers { get; } = new List<Buyer>()
         {
             new Buyer()
             {
                 Id = 1,
                 Name = "Остап",
+
             },
             new Buyer()
             {
@@ -18,7 +19,8 @@ namespace SalesTest.DAL.Data
                 Name = "Иполит Матвеевич"
             },
         };
-        static List<Product> products = new List<Product>()
+
+        public static List<Product> products { get; } = new List<Product>()
         {
             new Product()
             {
@@ -39,7 +41,8 @@ namespace SalesTest.DAL.Data
                 Price = 3,
             },
         };
-        static List<SalesPoint> salesPoints = new List<SalesPoint>()
+
+        public static List<SalesPoint> salesPoints { get; } = new List<SalesPoint>()
         {
             new SalesPoint()
             {
@@ -90,30 +93,58 @@ namespace SalesTest.DAL.Data
                 },
             },
         };
-        static List<Sales> sales = new List<Sales>()
+
+        public static List<ProvidedProduct> pp { get; } = new List<ProvidedProduct>()
         {
-            new Sales()
+            new ProvidedProduct()
             {
-                Id = 1,
+                ProductId = 1,
+                ProductQuantity = 5,
+                SalesPointId = 3,
+            },
+            new ProvidedProduct()
+            {
+                ProductId = 2,
+                ProductQuantity = 2,
+                SalesPointId = 2,
+            },
+            new ProvidedProduct()
+            {
+                ProductId = 3,
+                ProductQuantity = 3,
+                SalesPointId = 2,
+            },
+            new ProvidedProduct()
+            {
+                ProductId = 1,
+                ProductQuantity = 1,
                 SalesPointId = 1,
-                BuyerId = 1,
-                SalesData = new List<SalesData>()
-                {
-                    new SalesData()
-                    {
-                        ProductId = 1,
-                        ProductQuantity = 1,
-                        ProductIdAmount = 12,
-                        SalesId = 1,
-                    },
-                },
-                TotalAmount = 12,
             },
         };
 
-        public static List<Buyer> Buyers { get => buyers; }
-        public static List<Product> Products { get => products; }
-        public static List<SalesPoint> SalesPoints { get => salesPoints; }
-        public static List<Sales> Sales { get => sales; }
+
+
+        //public static List<Sales> sales = new List<Sales>()
+        //{
+        //    new Sales()
+        //    {
+        //        Id = 1,
+        //        SalesPointId = 1,
+        //        BuyerId = 1,
+        //        SalesData = salesData,
+        //        TotalAmount = 12,
+        //    },
+        //};
+        //public static List<SalesData> salesData = new List<SalesData>()
+        //{
+        //    new SalesData()
+        //    {
+        //        ProductId = 1,
+        //        ProductQuantity = 1,
+        //        ProductIdAmount = 12,
+        //        SalesId = 1,
+        //    },
+        //};
+
     }
 }
