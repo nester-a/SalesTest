@@ -95,5 +95,79 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
             Assert.Equal(entity2.Name, product2.Name);
             Assert.Equal(entity2.Price, product2.Price);
         }
+
+        [Fact]
+        public void ProductsRepository_GetById_Test()
+        {
+
+            var product1 = new Product()
+            {
+                Name = "Hello",
+                Price = 15.12m,
+
+            };
+            var product2 = new Product()
+            {
+                Name = "World",
+                Price = 100.25m,
+            };
+
+            var id1 = repo.Add(product1);
+            var id2 = repo.Add(product2);
+            repo.Save();
+
+            Assert.True(db.Products.Count() == 2);
+
+            var result1 = repo.GetById(id1);
+            Assert.True(result1 is not null);
+            Assert.Equal(result1.Name, product1.Name);
+            Assert.Equal(result1.Price, product1.Price);
+
+            var result2 = repo.GetById(id2);
+            Assert.True(result2 is not null);
+            Assert.Equal(result2.Name, product2.Name);
+            Assert.Equal(result2.Price, product2.Price);
+        }
+
+        [Fact]
+        public void ProductsRepository_Delete_Test()
+        {
+            var product1 = new Product()
+            {
+                Name = "Hello",
+                Price = 15.12m,
+
+            };
+            var product2 = new Product()
+            {
+                Name = "World",
+                Price = 100.25m,
+            };
+
+            var id1 = repo.Add(product1);
+            var id2 = repo.Add(product2);
+            repo.Save();
+
+            Assert.True(db.Products.Count() == 2);
+
+            var result1 = repo.GetById(id1);
+            Assert.True(result1 is not null);
+            Assert.Equal(result1.Name, product1.Name);
+            Assert.Equal(result1.Price, product1.Price);
+
+            var result2 = repo.GetById(id2);
+            Assert.True(result2 is not null);
+            Assert.Equal(result2.Name, product2.Name);
+            Assert.Equal(result2.Price, product2.Price);
+
+            var deleteResult = repo.Delete(id1);
+            repo.Save();
+
+            Assert.True(deleteResult is not null);
+            Assert.Equal(deleteResult.Name, product1.Name);
+            Assert.Equal(deleteResult.Price, product1.Price);
+
+            Assert.True(db.Products.Count() == 1);
+        }
     }
 }

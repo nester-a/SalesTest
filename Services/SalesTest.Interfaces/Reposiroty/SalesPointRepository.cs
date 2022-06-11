@@ -1,11 +1,16 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
-using SalesTest.Domain;
 using System.Collections.Generic;
+using System;
+using SalesTest.Interfaces.Extensions;
+using System.Linq;
+using SalesTest.Domain.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
-    public class SalesPointRepository : IRepository<SalesPoint>
+    ///<inheritdoc cref="IRepository<T>"/>
+    public class SalesPointRepository : IRepository<ISalesPoint>
     {
         SalesTestContext _context;
         public SalesPointRepository(SalesTestContext context)
@@ -13,34 +18,85 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             _context = context;
         }
 
-        public int Add(SalesPoint item)
+        public int Add(ISalesPoint item)
         {
-            return default;
+            if (item == null) throw new ArgumentNullException("Item is null");
+            var result = item.ToDAL();
+            
+            var id = _context.SalesPoints.Add(result).Entity.Id;
+
+            return id;
         }
 
-        public int Update(int id, SalesPoint updatedItem)
+        public int Update(int id, ISalesPoint updatedItem)
         {
-            return default;
+            if (updatedItem == null) throw new ArgumentNullException("Item is null");
+
+            var exsist = _context.SalesPoints.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            exsist.Name = updatedItem.Name;
+            exsist.ProvidedProducts = updatedItem.ProvidedProducts.Select(i => i.ToDAL()).ToList();
+
+            _context.SalesPoints.Update(exsist);
+
+            return id;
         }
 
-        public List<SalesPoint> GetAll()
+        public List<ISalesPoint> GetAll()
         {
-            return default;
+            var all = _context.SalesPoints.Include(i => i.ProvidedProducts).ToList();
+            return all.Select(i => i.ToDOM()).ToList();
         }
 
-        public SalesPoint GetById(int id)
+        public ISalesPoint GetById(int id)
         {
-            return default;
+            var exsist = _context.SalesPoints.Include(i => i.ProvidedProducts).FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            return exsist.ToDOM();
         }
 
-        public SalesPoint Delete(int id)
+        public ISalesPoint Delete(int id)
         {
-            return default;
+            var exsist = _context.SalesPoints.Include(i => i.ProvidedProducts).FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            _context.Remove(exsist);
+
+            return exsist.ToDOM();
         }
 
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public bool Exists(int id)
+        {
+            var result = _context.SalesPoints.FirstOrDefault(i => i.Id == id);
+            if (result is null) return false;
+            return true;
+        }
+
+        public List<string> GetAllInformation()
+        {
+            var all = GetAll();
+            var result = new List<string>();
+            foreach (var item in all)
+            {
+                result.Add($"Id: {item.Id}; Name: {item.Name};");
+                if (item.ProvidedProducts.Count > 0)
+                {
+                    result.Add($"Provided products:");
+                    foreach (var product in item.ProvidedProducts)
+                    {
+                        result.Add($"Product Id: {product.ProductId}; Product quantity: {product.ProductQuantity};");
+                    }
+                }
+                else result.Add($"No provided products");
+            }
+            return result;
         }
     }
 

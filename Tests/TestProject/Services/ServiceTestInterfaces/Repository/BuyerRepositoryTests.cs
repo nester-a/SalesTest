@@ -7,19 +7,10 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
 {
     public class BuyerRepositoryTests : BaseTest
     {
-        //static DbContextOptionsBuilder<SalesTestContext> optionBuilder = new DbContextOptionsBuilder<SalesTestContext>();
-        //static DbContextOptions<SalesTestContext> option = optionBuilder.UseInMemoryDatabase("TestDB").Options;
-        //static SalesTestContext db = new SalesTestContext(option);
-
-        //static BuyerRepositoryTests()
-        //{
-        //    DbInitializer.Initializer(db);
-        //}
-
+        static BuyerRepository repo = new BuyerRepository(db);
         [Fact]
         public void BuyerRepository_Add_Test()
         {
-            BuyerRepository repo = new BuyerRepository(db);
 
             var buyer = new Buyer()
             {
@@ -36,7 +27,6 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
         [Fact]
         public void BuyerRepository_Update_Test()
         {
-            BuyerRepository repo = new BuyerRepository(db);
 
             var buyer = new Buyer()
             {
@@ -67,7 +57,6 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
         [Fact]
         public void BuyerRepository_GetAll_Test()
         {
-            BuyerRepository repo = new BuyerRepository(db);
 
             var buyer1 = new Buyer()
             {
@@ -99,7 +88,6 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
         [Fact]
         public void BuyerRepository_GetById_Test()
         {
-            BuyerRepository repo = new BuyerRepository(db);
 
             var buyer1 = new Buyer()
             {
@@ -128,7 +116,6 @@ namespace TestProject.Services.ServiceTestInterfaces.Repository
         [Fact]
         public void BuyerRepository_Delete_Test()
         {
-            BuyerRepository repo = new BuyerRepository(db);
 
             var buyer1 = new Buyer()
             {

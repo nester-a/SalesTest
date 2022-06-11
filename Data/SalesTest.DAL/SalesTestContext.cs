@@ -61,8 +61,7 @@ namespace SalesTest.DAL
     {
         public void Configure(EntityTypeBuilder<ProvidedProduct> builder)
         {
-            builder.HasKey(pp => pp.SalesPointId);
-            builder.HasKey(pp => pp.ProductId);
+            builder.HasKey(pp => new { pp.SalesPointId, pp.ProductId });
             builder.Property(pp => pp.ProductQuantity).IsRequired();
         }
     }
@@ -87,8 +86,7 @@ namespace SalesTest.DAL
     {
         public void Configure(EntityTypeBuilder<SalesData> builder)
         {
-            builder.HasKey(sd => sd.ProductId);
-            builder.HasKey(sd => sd.SalesId);
+            builder.HasKey(sd => new { sd.ProductId, sd.SalesId });
             builder.Property(sd => sd.ProductQuantity).IsRequired();
             builder.Property(sd => sd.ProductIdAmount).IsRequired();
         }

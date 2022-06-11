@@ -1,14 +1,15 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
-using SalesTest.Domain;
 using System.Collections.Generic;
 using System;
 using SalesTest.Interfaces.Extensions;
 using System.Linq;
+using SalesTest.Domain.Base;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
-    public class ProductRepository : IRepository<Product>
+    ///<inheritdoc cref="IRepository<T>"/>
+    public class ProductRepository : IRepository<IProduct>
     {
         SalesTestContext _context;
         public ProductRepository(SalesTestContext context)
@@ -16,7 +17,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             _context = context;
         }
 
-        public int Add(Product item)
+        public int Add(IProduct item)
         {
             if (item == null) throw new ArgumentNullException("Item is null");
             var result = item.ToDAL();
@@ -24,7 +25,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return _context.Products.Add(result).Entity.Id;
         }
 
-        public int Update(int id, Product updatedItem)
+        public int Update(int id, IProduct updatedItem)
         {
             if (updatedItem == null) throw new ArgumentNullException("Item is null");
 
@@ -39,25 +40,51 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             return id;
         }
 
-        public List<Product> GetAll()
+        public List<IProduct> GetAll()
         {
             var all = _context.Products.ToList();
             return all.Select(i => i.ToDOM()).ToList();
         }
 
-        public Product GetById(int id)
+        public IProduct GetById(int id)
         {
-            return default;
+            var exsist = _context.Products.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            return exsist.ToDOM();
         }
 
-        public Product Delete(int id)
+        public IProduct Delete(int id)
         {
-            return default;
+            var exsist = _context.Products.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            _context.Remove(exsist);
+
+            return exsist.ToDOM();
         }
 
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public bool Exists(int id)
+        {
+            var result = _context.Products.FirstOrDefault(i => i.Id == id);
+            if (result is null) return false;
+            return true;
+        }
+
+        public List<string> GetAllInformation()
+        {
+            var all = GetAll();
+            var result = new List<string>();
+            foreach (var item in all)
+            {
+                result.Add($"Id: {item.Id}; Name: {item.Name}; Price: {item.Price}");
+            }
+            return result;
         }
     }
 

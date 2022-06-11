@@ -1,4 +1,5 @@
 ﻿using SalesTest.Domain.Base;
+using System;
 using System.Collections.Generic;
 
 namespace SalesTest.Domain
@@ -8,11 +9,9 @@ namespace SalesTest.Domain
     {
         public int Id { get; set; }
 
-        //public DateTimeOffset Date { get; set; } = DateTimeOffset.Now.Date;
-        public string Date { get; set; }
+        public string Date { get; set; } = DateTime.Now.Date.ToShortDateString();
 
-        //public DateTimeOffset Time {get; set; } = DateTimeOffset.Now.ToLocalTime();
-        public string Time {get; set; }
+        public string Time {get; set; } = DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
 
         public int SalesPointId { get; set; }
 

@@ -1,11 +1,18 @@
 using SalesTest.Interfaces.Base.Repository;
 using SalesTest.DAL;
-using SalesTest.Domain;
 using System.Collections.Generic;
+using System;
+using SalesTest.Interfaces.Extensions;
+using SalesDAL = SalesTest.DAL.Enities.Sales;
+using SalesDataDAL = SalesTest.DAL.Enities.SalesData;
+using System.Linq;
+using SalesTest.Domain.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesTest.SalesTest.Interfaces.Repository
 {
-    public class SalesRepository : IRepository<Sales>
+    ///<inheritdoc cref="IRepository<T>"/>
+    public class SalesRepository : IRepository<ISales>
     {
         SalesTestContext _context;
         public SalesRepository(SalesTestContext context)
@@ -13,35 +20,105 @@ namespace SalesTest.SalesTest.Interfaces.Repository
             _context = context;
         }
 
-        public int Add(Sales item)
+        public int Add(ISales item)
         {
-            return default;
+            if (item == null) throw new ArgumentNullException("Item is null");
+
+            var result = MapSalesToDal(item);
+            result.SalesData = item.SalesData.Select(i => MapSalesDataToDal(i, item)).ToList();
+            var id = _context.Sales.Add(result).Entity.Id;
+
+            return id;
         }
 
-        public int Update(int id, Sales updatedItem)
+        public int Update(int id, ISales updatedItem)
         {
-            return default;
+            if (updatedItem == null) throw new ArgumentNullException("Item is null");
+
+            var exsist = _context.Sales.FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            exsist.DateTime = DateTimeOffset.Parse(updatedItem.Date + " " + updatedItem.Time);
+            exsist.BuyerId = updatedItem.BuyerId;
+            exsist.Buyer = _context.Buyers.FirstOrDefault(i => i.Id == updatedItem.BuyerId);
+            exsist.SalesPointId = updatedItem.SalesPointId;
+            exsist.SalesData = updatedItem.SalesData.Select(i => MapSalesDataToDal(i, updatedItem)).ToList();
+            exsist.TotalAmount = exsist.SalesData.Sum(i => i.ProductIdAmount);
+
+            _context.Sales.Update(exsist);
+
+            return id;
         }
 
-        public List<Sales> GetAll()
+        public List<ISales> GetAll()
         {
-            return default;
+            var all = _context.Sales.Include(s => s.SalesData).ToList();
+            return all.Select(i => i.ToDOM()).ToList();
         }
 
-        public Sales GetById(int id)
+        public ISales GetById(int id)
         {
-            return default;
+            var exsist = _context.Sales.Include(s => s.SalesData).FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            return exsist.ToDOM();
         }
 
-        public Sales Delete(int id)
+        public ISales Delete(int id)
         {
-            return default;
+            var exsist = _context.Sales.Include(s => s.SalesData).FirstOrDefault(i => i.Id == id);
+            if (exsist is null) throw new ArgumentException("Item not found");
+
+            _context.Remove(exsist);
+
+            return exsist.ToDOM();
         }
 
         public void Save()
         {
             _context.SaveChanges();
         }
-    }
 
+        public bool Exists(int id)
+        {
+            var result = _context.Sales.FirstOrDefault(i => i.Id == id);
+            if (result is null) return false;
+            return true;
+        }
+
+        private SalesDAL MapSalesToDal(ISales item)
+        {
+            var result = item.ToDAL();
+            result.Buyer = _context.Buyers.FirstOrDefault(i => i.Id == item.Id);
+
+            return result;
+        }
+
+        private SalesDataDAL MapSalesDataToDal(ISalesData salesData, ISales item)
+        {
+            var result = salesData.ToDAL();
+            result.SalesId = item.Id;
+
+            return result;
+        }
+
+        public List<string> GetAllInformation()
+        {
+            var all = GetAll();
+            var result = new List<string>();
+            foreach (var item in all)
+            {
+                result.Add($"Id: {item.Id}; Date: {item.Date}; Time: {item.Time}; Sales Point Id: {item.SalesPointId}; Buyer Id: {item.BuyerId}; Total Amount: {item.TotalAmount}");
+                if (item.SalesData.Count > 0)
+                {
+                    result.Add($"Sales Data:");
+                    foreach (var sales in item.SalesData)
+                    {
+                        result.Add($"Product Id: {sales.ProductId}, Products Quantity: {sales.ProductQuantity}, Product Id Amount: {sales.ProductIdAmount}");
+                    }
+                }
+            }
+            return result;
+        }
+    }
 }
