@@ -7,15 +7,15 @@ namespace SalesTest.Interfaces.Base.Model
     public interface IInfoModel
     {
         /// <summary>Information about buyers</summary>
-        List<IBuyer> BuyersInfo { get; set; }
+        List<string> BuyersInfo { get; set; }
 
         /// <summary>Information about sales</summary>
-        List<ISales> SalesInfo { get; set; }
+        List<string> SalesInfo { get; set; }
 
         /// <summary>Information about sales points</summary>
-        List<ISalesPoint> SalesPointsInfo { get; set; }
+        List<string> SalesPointsInfo { get; set; }
 
         /// <summary>Information about products</summary>
-        List<IProduct> ProductInfo { get; set; }
+        List<string> ProductInfo { get; set; }
     }
 }
