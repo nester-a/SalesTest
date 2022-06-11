@@ -105,12 +105,7 @@ namespace SalesTest.Interfaces.UnitsOfWork
 
         public bool ProductsExistsOnSalesPoint(ISalesPoint salesPoint, IEnumerable<IProvidedProduct> products)
         {
-            foreach (var item in products)
-            {
-                var onStock = salesPoint.ProvidedProducts.Contains(item);
-                if(!onStock) return false;
-            }
-            return true;
+            return CheckStock(salesPoint.ProvidedProducts, products);
         }
 
         public bool ProductsExistsOnSalesPoint(int salesPointId, IEnumerable<IProvidedProduct> products)
@@ -174,14 +169,66 @@ namespace SalesTest.Interfaces.UnitsOfWork
             return sale;
         }
 
-        public void SaveInformation(ISales sales, ISalesPoint salesPoint, IBuyer buyer = null)
+        /// <summary>Save information in data-base</summary>
+        private void SaveInformation(ISales sales, ISalesPoint salesPoint, IBuyer buyer = null)
         {
-            SalesPoints.Update(salesPoint.Id, salesPoint);
+            var updatedSalesPoint = ReduceStock(salesPoint, sales.SalesData);
+
+            SalesPoints.Update(salesPoint.Id, updatedSalesPoint);
             var salesId = Sales.Add(sales);
             buyer.SalesIds.Add(salesId);
             if (buyer is not null)
                 Buyers.Update(buyer.Id, buyer);
             Sales.Save();
+        }
+
+        /// <summary>Check sales point provided products</summary>
+        /// <param name="productsStock">Sales point provided products</param>
+        /// <param name="productsToBuy">Buyers provided products</param>
+        /// <returns>True if enougth</returns>
+        private bool CheckStock(IEnumerable<IProvidedProduct> productsStock, IEnumerable<IProvidedProduct> productsToBuy)
+        {
+            var stockPositionCount = productsStock.Count();
+            var sellPositionCount = productsToBuy.Count();
+            if(stockPositionCount < sellPositionCount) return false;
+            int possibleToBuy = 0;
+
+            foreach (var productsItem in productsToBuy)
+            {
+                foreach (var salesPointItem in productsStock)
+                {
+                    if (salesPointItem.ProductId == productsItem.ProductId && salesPointItem.ProductQuantity >= productsItem.ProductQuantity)
+                        possibleToBuy++;
+                    continue;
+                }
+            }
+
+            if (possibleToBuy == sellPositionCount) return true;
+            return false;
+        }
+
+        /// <summary>Reduce product quantity on sales point stock</summary>
+        /// <param name="productsStock">Sales point with provided products</param>
+        /// <param name="productsToSell">Products to sell</param>
+        /// <returns>Sales point with updated stock</returns>
+        private ISalesPoint ReduceStock(ISalesPoint productsStock, IEnumerable<ISalesData> productsToSell)
+        {
+            var result = productsStock;
+            foreach (var product in productsStock.ProvidedProducts)
+            {
+                foreach (var item in productsToSell)
+                {
+                    if(product.ProductId == item.ProductId)
+                    {
+                        product.ProductQuantity -= item.ProductQuantity;
+                    }
+                }
+            }
+            if(productsStock.ProvidedProducts.Any(pp => pp.ProductQuantity == 0))
+            {
+                productsStock.ProvidedProducts.RemoveAll(pp => pp.ProductQuantity == 0);
+            }
+            return result;
         }
     }
 }

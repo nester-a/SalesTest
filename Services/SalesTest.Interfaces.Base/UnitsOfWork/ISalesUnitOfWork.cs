@@ -74,7 +74,5 @@ namespace SalesTest.Interfaces.Base.UnitsOfWork
         /// <returns>New sale</returns>
         public ISales MakeASale(ISaleModel model, IEnumerable<IProvidedProduct> providedProducts);
 
-        /// <summary>Save information in data-base</summary>
-        void SaveInformation(ISales sales, ISalesPoint salesPoint, IBuyer buyer = null);
     }
 }
