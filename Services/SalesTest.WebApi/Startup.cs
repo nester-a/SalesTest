@@ -29,8 +29,10 @@ namespace SalesTest.WebApi
         {
             services.AddDbContext<SalesTestContext>(opt => opt.UseInMemoryDatabase("SalesTest"));
             services.AddTransient<IRepository<IProduct>, ProductRepository>();
+            services.AddTransient<IRepository<IBuyer>, BuyerRepository>();
             services.AddTransient<ISalesUnitOfWork, SalesUnitOfWork>();
             services.AddTransient<IService<IProduct>, ProductService>();
+            services.AddTransient<IService<IBuyer>, BuyerService>();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
