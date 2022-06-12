@@ -1,63 +1,99 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SalesTest.Interfaces.Base.UnitsOfWork;
-using SalesTest.Interfaces.Model;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SalesTest.Domain.Base;
+using SalesTest.Interfaces.Base.Services;
+using SalesTest.Interfaces.Extensions;
+using SalesTest.Interfaces.Model.Sales;
+using System.Linq;
 
 namespace SalesTest.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/sales")]
     [ApiController]
     public class SalesController : ControllerBase
     {
-        private readonly ISalesUnitOfWork _unitOfWork;
+        private readonly IService<ISales> _service;
 
-        public SalesController(ISalesUnitOfWork unitOfWork)
+        public SalesController(IService<ISales> service)
         {
-            _unitOfWork = unitOfWork;
+            _service = service;
         }
 
-        /// <summary>Get all information about buyers, sale point, products and sales</summary>
-        /// <returns>List of information</returns>
         [HttpGet]
-        [Route("/info")]
-        public IActionResult AllInfo()
+        public IActionResult GetAll()
         {
-            return Ok(_unitOfWork.GetAll());
+            var sales = _service.GetAll();
+
+            if (sales.Any())
+            {
+                var result = sales.Select(x => x.ToModel()).ToList();
+                return Ok(result);
+            }
+            return NoContent();
         }
 
-        /// <summary>Do sales action</summary>
-        /// <param name="saleModel">Who, where, buy what</param>
-        /// <returns>Sales action result</returns>
-        [HttpPost]
-        [Route("/sale")]
-        public IActionResult Sale([FromBody]SaleModel saleModel)
+        [HttpGet("{id:int}")]
+        public IActionResult GetById(int id)
         {
-            //есть-ли такой покупатель в принципе
-            if (saleModel.BuyerId is not null && !_unitOfWork.BuyerExists((int)saleModel.BuyerId))
-                return Ok("There are no such buyer in our data-base");
-
-            //проверка существования товара
-            foreach (var item in saleModel.ProductsToBuy)
+            SalesModel sales;
+            try
             {
-                if(!_unitOfWork.ProductExists(item.Key))
-                    return Ok("There are no such product in our data-base");
+                sales = _service.GetById(id).ToModel();
             }
+            catch
+            {
+                return NotFound();
+            }
+            return Ok(sales);
+        }
 
-            //потом смотрим есть ли нужная точка покупки
-            if (!_unitOfWork.SalesPointExists(saleModel.SalesPointId))
-                return Ok("There are no such sales point in our data-base");
+        [HttpPost]
+        public IActionResult Add([FromBody] CreateSalesModel model)
+        {
+            var sales = model.ToDomain();
+            var id = _service.Add(sales);
+            if (id == -1)
+            {
+                return BadRequest(new { Message = $"Data-base has no this buyer, product or sales point. Or you entered product quantity for this sales point is too big" });
+            }
+            sales.Id = id;
 
-            //получили список товаров к покупке
-            var pp = _unitOfWork.GetProvidedProducts(saleModel);
+            return CreatedAtAction(nameof(GetById), new { Id = id }, sales.ToModel());
+        }
 
-            //проверили, что он есть в наличии в точке
-            if(!_unitOfWork.ProductsExistsOnSalesPoint(saleModel.SalesPointId, pp))
-                return Ok("Products are not enough in this sales point");
+        [HttpPut]
+        public IActionResult Edit(SalesModel model)
+        {
+            var sales = model.ToDomain();
+            int result;
+            try
+            {
+                result = _service.Update(model.Id, sales);
+                if (result == -1)
+                {
+                    return BadRequest(new { Message = $"Data-base has no this buyer, product or sales point. Or you entered product quantity for this sales point is too big" });
+                }
+            }
+            catch
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
 
-            //совершили продажу
-            var sale = _unitOfWork.MakeASale(saleModel, pp);
-
-            return Ok(sale);
-
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            ISales result;
+            try
+            {
+                result = _service.Delete(id);
+            }
+            catch
+            {
+                return NotFound();
+            }
+            return Ok(result.ToModel());
         }
     }
 }

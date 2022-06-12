@@ -35,6 +35,7 @@ namespace SalesTest.WebApi
             services.AddTransient<IService<IProduct>, ProductService>();
             services.AddTransient<IService<IBuyer>, BuyerService>();
             services.AddTransient<IService<ISalesPoint>, SalesPointsService>();
+            services.AddTransient<IService<ISales>, SalesService>();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
