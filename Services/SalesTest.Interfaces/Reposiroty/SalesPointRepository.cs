@@ -32,7 +32,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         {
             if (updatedItem == null) throw new ArgumentNullException("Item is null");
 
-            var exsist = _context.SalesPoints.FirstOrDefault(i => i.Id == id);
+            var exsist = _context.SalesPoints.Include(i => i.ProvidedProducts).FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
 
             exsist.Name = updatedItem.Name;
