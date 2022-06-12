@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SalesTest.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/products")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -36,13 +36,16 @@ namespace SalesTest.WebApi.Controllers
         [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            //var employee = employeesData.GetById(id);
-            //if (employee is null)
-            //    return NoContent();
-
-            //var dto = EmployeeMapper.EntityToDTO(employee);
-            //return Ok(dto);
-            return default;
+            ProductModel product;
+            try
+            {
+                product = _service.GetById(id).ToModel();
+            }
+            catch
+            {
+                return NoContent();
+            }
+            return Ok(product);
         }
 
         [HttpPost]
