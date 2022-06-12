@@ -53,6 +53,7 @@ namespace SalesTest.WebApi.Controllers
         {
             var product = model.ToDomain();
             var id = _service.Add(product);
+            product.Id = id;
 
             return CreatedAtAction(nameof(GetById), new { Id = id }, product.ToModel());
         }
