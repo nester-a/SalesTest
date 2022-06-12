@@ -2,6 +2,7 @@
 using SalesTest.Domain.Base;
 using SalesTest.Interfaces.Model.Buyer;
 using SalesTest.Interfaces.Model.Product;
+using SalesTest.Interfaces.Model.Sales;
 using SalesTest.Interfaces.Model.SalesPoint;
 using System.Linq;
 
@@ -102,6 +103,61 @@ namespace SalesTest.Interfaces.Extensions
             {
                 Name = item.Name,
                 ProvidedProducts = item.ProvidedProducts.Select(p => p.ToDomain()).ToList(),
+            };
+        }
+
+        public static SalesDataModel ToModel(this ISalesData item)
+        {
+            return new SalesDataModel()
+            {
+                ProductId = item.ProductId,
+                ProductQuantity = item.ProductQuantity,
+                ProductIdAmount = item.ProductIdAmount,
+            };
+        }
+        public static ISalesData ToDomain(this SalesDataModel item)
+        {
+            return new SalesData()
+            {
+                ProductId = item.ProductId,
+                ProductQuantity = item.ProductQuantity,
+                ProductIdAmount = item.ProductIdAmount,
+            };
+        }
+        public static SalesModel ToModel(this ISales item)
+        {
+            return new SalesModel()
+            {
+                Id = item.Id,
+                Date = item.Date,
+                Time = item.Time,
+                SalesPointId = item.SalesPointId,
+                BuyerId = item.BuyerId,
+                SalesData = item.SalesData.Select(p => p.ToModel()).ToList(),
+                TotalAmount = item.SalesData.Sum(p => p.ProductIdAmount),
+            };
+        }
+        public static ISales ToDomain(this SalesModel item)
+        {
+            return new Sales()
+            {
+                Id = item.Id,
+                Date = item.Date,
+                Time = item.Time,
+                SalesPointId = item.SalesPointId,
+                BuyerId = item.BuyerId,
+                SalesData = item.SalesData.Select(p => p.ToDomain()).ToList(),
+                TotalAmount = item.SalesData.Sum(p => p.ProductIdAmount),
+            };
+        }
+        public static ISales ToDomain(this CreateSalesModel item)
+        {
+            return new Sales()
+            {
+                SalesPointId = item.SalesPointId,
+                BuyerId = item.BuyerId,
+                SalesData = item.SalesData.Select(p => p.ToDomain()).ToList(),
+                TotalAmount = item.SalesData.Sum(p => p.ProductIdAmount),
             };
         }
 
