@@ -35,7 +35,7 @@ namespace SalesTest.SalesTest.Interfaces.Repository
         {
             if (updatedItem == null) throw new ArgumentNullException("Item is null");
 
-            var exsist = _context.Sales.FirstOrDefault(i => i.Id == id);
+            var exsist = _context.Sales.Include(s => s.SalesData).FirstOrDefault(i => i.Id == id);
             if (exsist is null) throw new ArgumentException("Item not found");
 
             exsist.DateTime = DateTimeOffset.Parse(updatedItem.Date + " " + updatedItem.Time);
