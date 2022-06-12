@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using SalesTest.Domain.Base;
 using SalesTest.Interfaces.Base.Services;
 using SalesTest.Interfaces.Extensions;
-using SalesTest.Interfaces.Model.Sales;
+using SalesTest.Interfaces.Model.SalesPoint;
 using System.Linq;
 
 namespace SalesTest.WebApi.Controllers
 {
-    [Route("api/sales")]
+    [Route("api/salespoints")]
     [ApiController]
-    public class SalesController : ControllerBase
+    public class SalesPointsController : ControllerBase
     {
-        private readonly IService<ISales> _service;
+        private readonly IService<ISalesPoint> _service;
 
-        public SalesController(IService<ISales> service)
+        public SalesPointsController(IService<ISalesPoint> service)
         {
             _service = service;
         }
@@ -22,11 +22,11 @@ namespace SalesTest.WebApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var sales = _service.GetAll();
+            var salesPoints = _service.GetAll();
 
-            if (sales.Any())
+            if (salesPoints.Any())
             {
-                var result = sales.Select(x => x.ToModel()).ToList();
+                var result = salesPoints.Select(x => x.ToModel()).ToList();
                 return Ok(result);
             }
             return NoContent();
@@ -35,43 +35,43 @@ namespace SalesTest.WebApi.Controllers
         [HttpGet("{id:int}")]
         public IActionResult GetById(int id)
         {
-            SalesModel sales;
+            SalesPointModel salesPoints;
             try
             {
-                sales = _service.GetById(id).ToModel();
+                salesPoints = _service.GetById(id).ToModel();
             }
             catch
             {
                 return NotFound();
             }
-            return Ok(sales);
+            return Ok(salesPoints);
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] CreateSalesModel model)
+        public IActionResult Add([FromBody] CreateSalesPointModel model)
         {
-            var sales = model.ToDomain();
-            var id = _service.Add(sales);
-            if (id == -1)
+            var salesPoints = model.ToDomain();
+            var id = _service.Add(salesPoints);
+            if(id == -1)
             {
-                return BadRequest(new { Message = $"Data-base has no this buyer, product or sales point. Or you entered product quantity for this sales point is too big" });
+                return BadRequest(new { Message = $"Data-base has no product with one model's provided product id" });
             }
-            sales.Id = id;
+            salesPoints.Id = id;
 
-            return CreatedAtAction(nameof(GetById), new { Id = id }, sales.ToModel());
+            return CreatedAtAction(nameof(GetById), new { Id = id }, salesPoints.ToModel());
         }
 
         [HttpPut]
-        public IActionResult Edit(SalesModel model)
+        public IActionResult Edit(SalesPointModel model)
         {
-            var sales = model.ToDomain();
+            var salesPoints = model.ToDomain();
             int result;
             try
             {
-                result = _service.Update(model.Id, sales);
+                result = _service.Update(model.Id, salesPoints);
                 if (result == -1)
                 {
-                    return BadRequest(new { Message = $"Data-base has no this buyer, product or sales point. Or you entered product quantity for this sales point is too big" });
+                    return BadRequest(new { Message = $"Data-base has no product with one model's provided product id" });
                 }
             }
             catch
@@ -84,7 +84,7 @@ namespace SalesTest.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            ISales result;
+            ISalesPoint result;
             try
             {
                 result = _service.Delete(id);

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,12 +8,11 @@ using Microsoft.OpenApi.Models;
 using SalesTest.DAL;
 using SalesTest.Interfaces.Base.UnitsOfWork;
 using SalesTest.Interfaces.UnitsOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SalesTest.Interfaces.Base.Model;
-using SalesTest.Interfaces.Model;
+using SalesTest.Interfaces.Services;
+using SalesTest.Interfaces.Base.Services;
+using SalesTest.Domain.Base;
+using SalesTest.Interfaces.Base.Repository;
+using SalesTest.SalesTest.Interfaces.Repository;
 
 namespace SalesTest.WebApi
 {
@@ -30,7 +28,14 @@ namespace SalesTest.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SalesTestContext>(opt => opt.UseInMemoryDatabase("SalesTest"));
+            services.AddTransient<IRepository<IProduct>, ProductRepository>();
+            services.AddTransient<IRepository<IBuyer>, BuyerRepository>();
+            services.AddTransient<IRepository<ISalesPoint>, SalesPointRepository>();
             services.AddTransient<ISalesUnitOfWork, SalesUnitOfWork>();
+            services.AddTransient<IService<IProduct>, ProductService>();
+            services.AddTransient<IService<IBuyer>, BuyerService>();
+            services.AddTransient<IService<ISalesPoint>, SalesPointsService>();
+            services.AddTransient<IService<ISales>, SalesService>();
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
