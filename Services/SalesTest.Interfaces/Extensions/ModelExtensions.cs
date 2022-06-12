@@ -2,6 +2,8 @@
 using SalesTest.Domain.Base;
 using SalesTest.Interfaces.Model.Buyer;
 using SalesTest.Interfaces.Model.Product;
+using SalesTest.Interfaces.Model.SalesPoint;
+using System.Linq;
 
 namespace SalesTest.Interfaces.Extensions
 {
@@ -59,5 +61,49 @@ namespace SalesTest.Interfaces.Extensions
                 Name = item.Name,
             };
         }
+
+        public static ProvidedProductModel ToModel(this IProvidedProduct item)
+        {
+            return new ProvidedProductModel()
+            {
+                ProductId = item.ProductId,
+                ProductQuantity = item.ProductQuantity,
+            };
+        }
+        public static IProvidedProduct ToDomain(this ProvidedProductModel item)
+        {
+            return new ProvidedProduct()
+            {
+                ProductId = item.ProductId,
+                ProductQuantity = item.ProductQuantity,
+            };
+        }
+        public static SalesPointModel ToModel(this ISalesPoint item)
+        {
+            return new SalesPointModel()
+            {
+                Id = item.Id,
+                Name = item.Name,
+                ProvidedProducts = item.ProvidedProducts.Select(p => p.ToModel()).ToList(),
+            };
+        }
+        public static ISalesPoint ToDomain(this SalesPointModel item)
+        {
+            return new SalesPoint()
+            {
+                Id = item.Id,
+                Name = item.Name,
+                ProvidedProducts = item.ProvidedProducts.Select(p => p.ToDomain()).ToList(),
+            };
+        }
+        public static ISalesPoint ToDomain(this CreateSalesPointModel item)
+        {
+            return new SalesPoint()
+            {
+                Name = item.Name,
+                ProvidedProducts = item.ProvidedProducts.Select(p => p.ToDomain()).ToList(),
+            };
+        }
+
     }
 }
