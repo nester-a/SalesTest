@@ -27,7 +27,7 @@ namespace SalesTest.WebApi.Controllers
 
             if (products.Any())
             {
-                var result = products.Select(x => ModelExtensions.ToModel(x)).ToList();
+                var result = products.Select(x => x.ToModel()).ToList();
                 return Ok(result);
             }
             return NoContent();
@@ -43,37 +43,49 @@ namespace SalesTest.WebApi.Controllers
             }
             catch
             {
-                return NoContent();
+                return NotFound();
             }
             return Ok(product);
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] string dto)
+        public IActionResult Add([FromBody] CreateProductModel model)
         {
-            //var employee = EmployeeMapper.DTOToEntity(dto);
-            //var id = employeesData.Add(employee);
-            //return CreatedAtAction(nameof(GetById), new { Id = id }, EmployeeMapper.EntityToDTO(employee));
-            return default;
+            var product = model.ToDomain();
+            var id = _service.Add(product);
+
+            return CreatedAtAction(nameof(GetById), new { Id = id }, product.ToModel());
         }
 
         [HttpPut]
-        public IActionResult Edit(string dto)
+        public IActionResult Edit(ProductModel model)
         {
-            //var employee = EmployeeMapper.DTOToEntity(dto);
-            //var result = employeesData.Edit(employee);
-            //return Ok(result);
-            return default;
+            var product = model.ToDomian();
+            int result;
+            try
+            {
+                result = _service.Update(model.Id, product);
+            }
+            catch
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            //var result = employeesData.Delete(id);
-            //return result
-            //    ? Ok(true)
-            //    : NotFound(false);
-            return default;
+            IProduct result;
+            try
+            {
+                result = _service.Delete(id);
+            }
+            catch
+            {
+                return NotFound();
+            }
+            return Ok(result.ToModel());
         }
     }
 }

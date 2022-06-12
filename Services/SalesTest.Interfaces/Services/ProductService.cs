@@ -16,12 +16,16 @@ namespace SalesTest.Interfaces.Services
         }
         public int Add(IProduct item)
         {
-            return _repo.Add(item);
+            var result = _repo.Add(item);
+            _repo.Save();
+            return result;
         }
 
         public IProduct Delete(int id)
         {
-            return _repo.Delete(id);
+            var result = _repo.Delete(id);
+            _repo.Save();
+            return result;
         }
 
         public List<IProduct> GetAll()
@@ -36,7 +40,9 @@ namespace SalesTest.Interfaces.Services
 
         public int Update(int id, IProduct updatedItem)
         {
-            return _repo.Update(id, updatedItem);
+            var result = _repo.Update(id, updatedItem);
+            _repo.Save();
+            return result;
         }
     }
 }
